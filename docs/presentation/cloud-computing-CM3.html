@@ -1,0 +1,340 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Cloud Computing CM3</title>
+    <link rel="icon" href="reveal/img/ensai_logo_transparent.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="reveal/css/reveal.css">
+    <link rel="stylesheet" href="reveal/css/theme/solarized.css">
+    <link rel="stylesheet" href="reveal/css/mine.css">
+    <link rel="stylesheet" href="reveal/css/simple-grid.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal/lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'reveal/css/print/pdf.css' : 'reveal/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'reveal/css/print/mine-pdf.css' : 'reveal/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'reveal/css/theme/white.css' : 'reveal/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <section>
+                    <h1>Cloud Computing, CM3</h1>
+                    <p>Pépin Rémi, Ensai, 2023</p>
+                    <p>remi.pepin@ensai.fr</p>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Le serverless</h2>
+                </section>
+                <section>
+                    <h3>Un service avec serveur</h3>
+                    <p>Cas d'un service classique type web service</p>
+                    <ul>
+                        <li>Je choisi la configuration de mon instance EC2</li>
+                        <li>J'installe mon web service</li>
+                        <li>J'ai un accès total à ma machine</li>
+                    </ul>
+                    <div class="important-bloc">Je suis facturé au temps d'utilisation de
+                        ma mon service. Tant qu'il est allumée je le paye. Qu'il traite 2
+                        ou 100 000 requêtes le prix sera le même.
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Un service sans serveur ?</h3>
+                    <p>Cas d'une fonction as a Service</p>
+                    <ul>
+                        <li>Je choisi la puissance et le déclencheur de ma fonction</li>
+                        <li>J'upload le code de ma fonction</li>
+                        <li>Quand un événement déclenche ma fonction, mon CP la lance</li>
+                    </ul>
+                    <div class="important-bloc">Je suis facturé au temps d'exécution de ma
+                        fonction. Si elle est souvent déclenché je paye beaucoup, si elle
+                        ne l'est pas je ne paye rien.
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Le serverless</h3>
+                    <ul>
+                        <li class="fragment">Terme mal choisi : des serveurs sont bien
+                            utilisés</li>
+                        <li class="fragment">Mais ils sont 100% gérés par le CP et pas par
+                            vous !</li>
+                    </ul>
+                    <div class="important-bloc fragment">
+                        Un service dit "serverless" est un service qui masque totalement
+                        la partie serveur au client, qui devient à la charge du CP. Ce
+                        n'est pas un SaaS car fourni des ressources informatiques.
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Différents services serverless</h3>
+                    <ul>
+                        <li>Function as a Service : AWS Lambda, GCP Cloud Functions, Azure
+                            Functions</li>
+                        <li>Base de données : AWS Aurora serverless, AWS DynamoDB, GCP
+                            Datastore</li>
+                        <li>Stockage objet : Amazon S3, GCP Cloud Storage, OVH Object
+                            Storage</li>
+                        <li>Et bien d'autres</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Avantages / Inconvénients</h3>
+                    <div class="container">
+                        <div class="col">
+                            <p class="green">Avantages</p>
+                            <ul>
+                                <li class="fragment">Coût (si utilisation imprévisible)
+                                </li>
+                                <li class="fragment">Scalability/Elasticity :
+                                    théoriquement pas de limite car géré par CP</li>
+                                <li class="fragment">Productivité : facile à déployer car
+                                    moins de configuration, maintenance</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="col">
+                            <p class="red">Désavantages possible</p>
+                            <ul>
+                                <li class="fragment">Latence : temps de lancement à
+                                    prendre en compte (il existe des solutions)</li>
+                                <li class="fragment">Puissance limitée : conçu pour des
+                                    traitements courts et léger</li>
+                                <li class="fragment">Monitorage et débogage : si plusieurs
+                                    services communiquent entre eux vite difficile de
+                                    comprendre ce qu'il se passe. </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="important-bloc fragment">
+                        Permet de se concentrer sur le métier.
+                    </div>
+                </section>
+                <section>
+                    <h3>AWS Lambda</h3>
+                    <ul>
+                        <li>Compatible avec des nombreux langages (dont python)</li>
+                        <li>Configuration de la puissance, timeout, concurrence, variable
+                            d'env </li>
+                        <li>Pas de serveurs à gérer</li>
+                        <li>Facturation au temps d'exécution (ms)</li>
+                        <li>Environnement éphémère géré par AWS</li>
+                        <li>Temps exécution max : 15 min</li>
+                    </ul>
+                    <div class="important-bloc fragment">Bout de code qui sera exécuté en
+                        fonction de déclencheurs (périodicité, requête HTTP, alerte etc)
+                    </div>
+                </section>
+
+                <section>
+                    <h3>AWS Lambda : exemple</h3>
+                    <pre><code class="python" data-trim data-noescape>
+import json
+import os
+print('Loading function')
+
+def lambda_handler(event, context):
+    print("Received event: " + json.dumps(event, indent=2))
+    print("value1 = " + event['key1'])
+    print(os.getenv("foo"))
+    return event['key1']  # Echo back the first key value
+                        </code></pre>
+                    <ul>
+                        <li>lambda_handler : la fonction qui sera appelée</li>
+                        <li>event : un dictionnaire avec les params. Dépend du déclencheur
+                        </li>
+                        <li>context : des métadonnées (nom de la fonction, mémoire max
+                            etc)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Code CDKTF</h3>
+
+                    <pre><code class="python" data-trim data-noescape>
+class LambdaStack(TerraformStack):
+    def init(self, scope: Construct, id: str):
+        super().init(scope, id)
+        AwsProvider(self, "AWS", region="us-east-1")
+
+        # Packagage du code
+        code = TerraformAsset(
+            self, "code",
+            path="./lambda",
+            type= AssetType.ARCHIVE
+        )
+
+        # Create Lambda function
+        lambda_function = LambdaFunction(self,
+                "lambda",
+                function_name="first_lambda",
+                runtime="python3.8",
+                memory_size=128,
+                timeout=60,
+                role="arn:aws:iam::147552475298:role/LabRole",
+                filename= code.path,
+                handler="lambda_function.lambda_handler",
+                environment={"variables":{"foo":"bar"}}
+            )
+app = App()
+LambdaStack(app, "cdktf_lambda")
+app.synth()
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>AWS SQS : Simple Queue Service</h3>
+                    <ul>
+                        <li>Service pour avoir une queue d'événements (~FIFO)</li>
+                        <li>Peut déclencher une lambda ou servir d'output</li>
+                        <li>Pas de serveurs à gérer</li>
+                        <li>Facturation au nombre d'évènements</li>
+                    </ul>
+                    <div class="important-bloc fragment">Permet de faire le lien entre
+                        différents service.</div>
+                </section>
+
+                <section>
+                    <h3>AWS SQS : Simple Queue Service</h3>
+                    <pre><code class="json" data-trim data-noescape>
+{
+    "Records": [
+        {
+        "messageId": "19dd0b57-b21e-4ac1-bd88-01bbb068cb78",
+        "receiptHandle": "MessageReceiptHandle",
+        "body": "Hello from SQS!", // <<==== event ici, souvent un objet json (clé:valeur)
+        "attributes": {
+            "ApproximateReceiveCount": "1",
+            "SentTimestamp": "1523232000000",
+            "SenderId": "123456789012",
+            "ApproximateFirstReceiveTimestamp": "1523232000001"
+        },
+        "messageAttributes": {},
+        "md5OfBody": "{{{md5_of_body}}}",
+        "eventSource": "aws:sqs",
+        "eventSourceARN": "arn:aws:sqs:us-east-1:123456789012:MyQueue",
+        "awsRegion": "us-east-1"
+        }
+    ]
+}
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>AWS SQS + Lambda</h3>
+                    <pre><code class="python" data-trim data-noescape>
+class LambdaStack(TerraformStack):
+    def init(self, scope: Construct, id: str):
+        super().init(scope, id)
+        AwsProvider(self, "AWS", region="us-east-1")
+        # Packagage du code
+        code = TerraformAsset(...)
+        # Create Lambda function
+        lambda_function = LambdaFunction(...)
+        # Create SQS queue
+        queue = SqsQueue(
+            self,
+            "queue",
+            name="input_queue",
+            visibility_timeout_seconds=60
+        )
+        # Link SQS as Lambda's source
+        LambdaEventSourceMapping(
+            self, "event_source_mapping",
+            event_source_arn=queue.arn,
+            function_name=lambda_function.arn
+        )
+app = App()
+LambdaStack(app, "cdktf_lambda")
+app.synth()
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>TP AWS Lambda</h3>
+                    <p>Objectif</p>
+                    <ul>
+                        <li>Créer une fonction Lambda simple qui se déclenche
+                            périodiquement via la console</li>
+                        <li>Créer une fonction Lambda qui somme 2 nombres provenant d'une
+                            queue SQS, puis écris le résultat dans une autre queue SQS</li>
+                    </ul>
+                </section>
+
+            </section>
+
+            <section>
+                <h2>That's all folks</h2>
+                <img src="https://media.giphy.com/media/7yojoQtevjOCI/giphy-downsized.gif"
+                    alt="" class="plain no-print">
+            </section>
+
+        </div>
+    </div>
+
+    <script src="reveal/dist/reveal.js"></script>
+    <script src="reveal/plugin/highlight/highlight.js"></script>
+    <script src="reveal/plugin/zoom/zoom.js"></script>
+    <script src="reveal/plugin/notes/notes.js"></script>
+	<script src="reveal/plugin/search/search.js"></script>
+
+    <script>
+
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            viewDistance: 3,
+            width: 1600,
+            height: 900,
+            slideNumber: 'c/t',
+            pdfSeparateFragments: false,
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
+

@@ -1,0 +1,41 @@
+.important{
+  color : #FFAA00 !important;
+  font-weight: bold !important;
+}
+
+.important-bloc{
+    background: #FFAA00;
+    color: black;
+    font-size: larger !important;
+    font-weight: bold !important;
+    padding: 0.1em !important;
+    margin: 0.4em 0 !important;
+}
+
+img.icon{
+    margin : 0 !important;
+    background: transparent !important;
+    }
+
+.reveal .slides section .fragment.highlight-important,
+.reveal .slides section .fragment.highlight-current-important {
+  opacity: 1;
+  visibility: inherit; }
+
+.reveal .slides section .fragment.highlight-important.visible {
+  color: #FFAA00; }
+
+.w80{
+width:80%
+}
+
+.no-print{
+display : none !important}
+
+
+.reveal pre code {
+    display: block;
+    padding: 5px;
+    overflow: auto;
+    max-height: 800px;
+    word-wrap: normal; }

@@ -1,0 +1,290 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Cloud Computing CM2</title>
+    <link rel="icon" href="reveal/img/ensai_logo_transparent.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="reveal/css/reveal.css">
+    <link rel="stylesheet" href="reveal/css/theme/solarized.css">
+    <link rel="stylesheet" href="reveal/css/mine.css">
+    <link rel="stylesheet" href="reveal/css/simple-grid.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal/lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'reveal/css/print/pdf.css' : 'reveal/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'reveal/css/print/mine-pdf.css' : 'reveal/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'reveal/css/theme/white.css' : 'reveal/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <section>
+                    <h1>Cloud Computing, CM2</h1>
+                    <p>Pépin Rémi, Ensai, 2023</p>
+                    <p>remi.pepin@ensai.fr</p>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Haute disponibilité</h2>
+                </section>
+
+                <section>
+                    <h3>Utilisation d'un service au cours du temps</h3>
+                    <img class="w60" src="img/CM2/utilisation service.jpg" alt="">
+                </section>
+
+                <section>
+                    <h3>Déploiement sur une seule machine</h3>
+                    <img class="w60" src="img/CM2/utilisation service perdu.jpg" alt="">
+                </section>
+
+                <section>
+                    <h3>Déploiement sur une flotte élastique de machine</h3>
+                    <img class="w60" src="img/CM2/utilisation service ASG.jpg" alt="">
+                </section>
+
+                <section>
+                    <h3>Modèle de déploiement</h3>
+                    <div class="container">
+                        <div class="col">
+                            <p>Machine unique</p>
+                            <ul>
+                                <li> <span class="red">Désavantages</span>
+                                    <ul>
+                                        <li>Facturation élevée</li>
+                                        <li>Reprise sur erreur</li>
+                                    </ul>
+                                </li>
+                                <li> <span class="green">Avantages</span>
+                                    <ul>
+                                        <li>Simple à mettre en place</li>
+                                        <li>Application statefull</li>
+                                    </ul>
+                                </li>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col">
+                            <p>Flotte de machine</p>
+                            <ul>
+                                <li> <span class="red">Désavantages</span>
+                                    <ul>
+                                        <li>Ajoute de la complexité</li>
+                                        <li>Monitorer une flotte de machine</li>
+                                        <li>Application stateless</li>
+                                    </ul>
+                                </li>
+                                <li> <span class="green">Avantages</span>
+                                    <ul>
+                                        <li>Permet de faire des économies</li>
+                                        <li>Permet haute disponibilité</li>
+                                    </ul>
+                                </li>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Auto-Scaling Group + Load Balancer</h3>
+                    <img src="../Labs/Lab 1 - EC2 base/img/ELB+ASG.jpg" class="w40" alt="">
+                </section>
+
+                <section>
+                    <h3>Auto-Scaling Group + Load Balancer</h3>
+                    <ul>
+                        <li>Auto-Scaling Group : gère une flotte d'EC2. Peut en lancer/éteindre en fonction de conditions (heures, utilisation CPU, RAM), ou si une machine est considérée comme ko</li>
+                        <li>Load Balancer : composant qui réparti le traffic entre plusieurs machines. Permet un point d'entrée unique pour accéder à une flotte. Équilibre le traffic, et peut renvoyer un utilisateur vers la même machine (sticky session) </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Auto-Scaling Group + Load Balancer</h3>
+                    <ul>
+                        <li>Haute disponibilité</li>
+                        <li>Élasticité horizontale</li>
+                        <li>Permet de faire des économies</li>
+                        <li>Nécessite d'être pris en compte dans le code</li>
+                        <li>Pour la partie traitement, pas stockage</li>
+                    </ul>
+                    <div class="important-bloc fragment">Pattern courant pour assurer haute disponibilité</div>
+                </section>
+
+
+            </section>
+
+            <section>
+                <section>
+                    <h2>Infrastructure as Code (IaC)</h2>
+                </section>
+
+                <section>
+                    <h3>Un constat</h3>
+                    <ul>
+                        <li>⏳ Fastidieux</li>
+                        <li>♻ Réplication ?</li>
+                        <li>📚 Versionnable ?</li>
+                        <li>🎼 Orchestration ?</li>
+                        <li>🤔 Ai-je bien tout éteint ?</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Infrastructure as Code</h3>
+                    <div class="important-bloc">L'Infrastructure as Code (IaC) consiste à
+                        définir son architecture informatique comme du code. Au lieu de
+                        naviguer sur une interface, les services à déployer seront définis
+                        dans des fichiers via un langage spécifique. Ce code pourra ainsi
+                        être versionné et redéployé à l'infini.</div>
+
+                    <ul class="fragment">
+                        <li>Terraform (cross plateforme)</li>
+                        <li>Amazon Cloud Formation, Amazon Serverless Application Manager
+                        </li>
+                        <li>Azure Resource Manager</li>
+                        <li>Google Cloud Deployment Manager</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Terraform</h3>
+                    <ul>
+                        <li>Projet open source crée par HashiCorp</li>
+                        <li>Langage de configuration / CDK pour infra</li>
+                        <li>Terraform provider pour traduction</li>
+                        <li>Utilise les API des différents systèmes</li>
+                    </ul>
+                    <img src="https://developer.hashicorp.com/_next/image?url=https%3A%2F%2Fcontent.hashicorp.com%2Fapi%2Fassets%3Fproduct%3Dterraform%26version%3Drefs%252Fheads%252Fv1.3%26asset%3Dwebsite%252Fimg%252Fdocs%252Fintro-terraform-apis.png%26width%3D2048%26height%3D644&w=2048&q=75"
+                        alt="">
+                </section>
+
+                <section>
+                    <h3>Configuration language vs CDKTF</h3>
+                    <ul>
+                        <li>HashiCorp Configuration Language (HCL) : pas json ni yaml
+                            (existe une version json)</li>
+                        <li>CDKTF : bibliothèques pour coder son architecture dans son
+                            langage de prédilection</li>
+                    </ul>
+                    <div class="fragment important">Pour ne pas apprendre un nouveau
+                        langage, nous allons utiliser le CDKTF</div>
+                    <img src="https://developer.hashicorp.com/_next/image?url=https%3A%2F%2Fcontent.hashicorp.com%2Fapi%2Fassets%3Fproduct%3Dterraform-cdk%26version%3Dv0.15.5%26asset%3Dwebsite%252Fdocs%252Fcdktf%252Fterraform-platform.png%26width%3D1776%26height%3D1317&w=1920&q=75"
+                        alt="" class="w50">
+                </section>
+
+                <section>
+                    <h3>CDKTF</h3>
+                    <img src="img/CM2/cdktf.jpg" alt="">
+                </section>
+
+                <section>
+                    <h3>Exemple</h3>
+                    <pre><code data-trim data-noescape>
+from constructs import Construct
+from cdktf import App, NamedRemoteWorkspace, TerraformStack, TerraformOutput, RemoteBackend
+from cdktf_cdktf_provider_aws.provider import AwsProvider
+from cdktf_cdktf_provider_aws.instance import Instance
+
+
+class MyStack(TerraformStack):
+    def __init__(self, scope: Construct, ns: str):
+        super().__init__(scope, ns)
+
+        AwsProvider(self, "AWS", region="us-west-1")
+
+        instance = Instance(self, "compute",
+                            ami="ami-01456a894f71116f2",
+                            instance_type="t2.micro",
+                            )
+
+        TerraformOutput(self, "public_ip",
+                        value=instance.public_ip,
+                        )
+
+
+app = App()
+stack = MyStack(app, "aws_instance")
+app.synth()
+                          </code></pre>
+                    Plus qu'a faire un "cdktf deploy" pour déployer l'architecture
+                </section>
+
+                <section>
+                    <h3>CDKTF : TP 2 - Prise en main</h3>
+                    <p>Ce que vous allez faire</p>
+                    <ol>
+                        <li>Terminer le TP 1 si ce n'est pas fait</li>
+                        <li>Refaire le TP 1 en utilisant le CDK TerraForm</li>
+                    </ol>
+                </section>
+
+            </section>
+
+            <section>
+                <h2>That's all folks</h2>
+                <img src="https://media.giphy.com/media/7yojoQtevjOCI/giphy-downsized.gif"
+                    alt="" class="plain no-print">
+            </section>
+
+        </div>
+    </div>
+
+    <script src="reveal/dist/reveal.js"></script>
+    <script src="reveal/plugin/highlight/highlight.js"></script>
+    <script src="reveal/plugin/zoom/zoom.js"></script>
+    <script src="reveal/plugin/notes/notes.js"></script>
+	<script src="reveal/plugin/search/search.js"></script>
+
+    <script>
+
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            viewDistance: 3,
+            width: 1600,
+            height: 900,
+            slideNumber: 'c/t',
+            pdfSeparateFragments: false,
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
