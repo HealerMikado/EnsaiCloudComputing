@@ -18,7 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Cloud Computing - Ensai - 2022-2023
+title: Cloud Computing Ensai 2022-2023
 author:
   name: Pépin Rémi
   email: remi.pepin@ensai.fr
