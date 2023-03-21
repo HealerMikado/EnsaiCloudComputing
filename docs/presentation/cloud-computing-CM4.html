@@ -1,0 +1,411 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Cloud Computing CM4</title>
+    <link rel="icon" href="reveal/img/ensai_logo_transparent.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="reveal/css/reveal.css">
+    <link rel="stylesheet" href="reveal/css/theme/solarized.css">
+    <link rel="stylesheet" href="reveal/css/mine.css">
+    <link rel="stylesheet" href="reveal/css/simple-grid.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="reveal/lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'reveal/css/print/pdf.css' : 'reveal/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'reveal/css/print/mine-pdf.css' : 'reveal/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'reveal/css/theme/white.css' : 'reveal/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <section>
+                    <h1>Cloud Computing, CM3</h1>
+                    <h2>Stockage de données dans le Cloud</h2>
+                    <p>Pépin Rémi, Ensai, 2023</p>
+                    <p>remi.pepin@ensai.fr</p>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Le stockage de données dans le cloud</h2>
+                </section>
+                <section>
+                    <h3>Les différents services de stockage</h3>
+                    <img src="https://media.giphy.com/media/lKXEBR8m1jWso/giphy.gif"
+                        alt="" class="w60">
+                </section>
+
+                <section>
+                    <h3>Les différents services de stockage 1/2</h3>
+                    <ul>
+                        <li><span class="important">Stockage block :</span> données
+                            directement sur un disque dur (SSH/HDD). Pour stocker des
+                            données pour une VM. AWS EBS, GCP Persistent Disk</li>
+                        <li><span class="important">Stockage réseau :</span> données sur
+                            un stockage partagé entre plusieurs VM. Pensez au dossier
+                            partagé de l'Ensai. AWS EFS, GCP Filestore, Azure Files</li>
+                        <li><span class="important">Stockage objet :</span> données
+                            stockées sur des serveurs distant. Pas de point de montage sur
+                            la machine. Fichiers accessibles via requêtes HTTP. AWS S3,
+                            GCP Cloud Storage, Azure Blob Storage</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Les différents services de stockage 2/2</h3>
+                    <ul>
+                        <li><span class="important">Base de données relationnelle :
+                            </span> pour des données tabulaires. On ne stocke plus un
+                            fichier mais des données structurées et on utilise SQL pour
+                            les requêter. Possibilité de faire des jointures. AWS RDS, GCP
+                            Cloud SQL</li>
+                        <li><span class="important">Base de données no-SQL :</span> pour
+                            des données semi structurées voir non structurées. Interaction
+                            avec les données possibles, par contre plus de jointure. AWS
+                            DynamoDB, GCP Cloud Big Table</li>
+                        <li><span class="important">Cache :</span> les données sont
+                            stockées en RAM et plus sur disque. Assure une grande
+                            performance, par contre les données peuvent être perdu.
+                            Uniquement pour accélérer l'accès à des données. AWS
+                            Elasticache, GCP Memorystore, Azure Cache</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Amazon S3</h2>
+                </section>
+
+                <section>
+                    <h3>In a nutshell 🥜</h3>
+                    <ul>
+                        <li>Stockage <em>illimité</em> (💰💰)</li>
+                        <li>Stockage non structuré (image, vidéo, text ...)</li>
+                        <li>5TB max par objet</li>
+                        <li>Objet accessible via API Rest (identifiant unique par objet)
+                        </li>
+                        <li>Possibilité de versionner et chiffrer les objets</li>
+                        <li>Gestion fine des accès</li>
+                        <li>Différents niveaux de stockage (de fréquent à archive) pour
+                            différents cas d'utilisation</li>
+                    </ul>
+
+                </section>
+
+                <section>
+                    <h3>Les avantages</h3>
+                    <div class="container">
+                        <div class="col">
+                            <ul>
+                                <li><span class="important">Durabilité :</span>
+                                    99,999999999 (onze 9).</li>
+                                <li><span class="important">Disponibilité :</span> les
+                                    données sont toujours accessible via Internet. &lt 60
+                                    minutes de downtime par an</li>
+                                <li><span class="important">Passage à l'échelle :</span>
+                                    stockage <em>infini</em></li>
+                                <li><span class="important">Sécurité :</span> chiffrement,
+                                    gestion des droits fin </li>
+                                <li><span class="important">Performance :</span> peut
+                                    gérer un grand nombre de requêtes, s'insère
+                                    parfaitement dans l'écosystème AWS</li>
+                            </ul>
+                        </div>
+                        <div class="col">
+                            <ul>
+                                <li><span class="important">Traitement des données :
+                                    </span>avec AWS GLue et Amazon Athena, S3 devient
+                                    un datalake (on peut requêter les données)</li>
+                                <li><span class="important">Cycle de vie :</span> les
+                                    données peuvent être supprimer automatiquement, passer
+                                    dans un autre niveau de stockage et versionner si
+                                    besoin.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Les niveaux de stockage</h3>
+                    <ol>
+                        <li><span class="important">S3 standard :</span> meilleures
+                            performances, mais le plus cher </li>
+                        <li><span class="important">S3 standard IA :</span> pour données
+                            accédées rarement. Les mêmes perfs que S3 standard, moins cher
+                            en terme de Go/mois mais l'accès aux données est plus cher
+                        </li>
+                        <li><span class="important">S3 One Zone IA :</span> les données ne
+                            sont stockées que dans un data center. Moins cher que standard
+                            IA, mais les perfs sont inférieures</li>
+                        <li><span class="important">S3 Glacier, deep archive:</span> les
+                            solutions les moins chères, mais l'accès aux données est cher
+                            et prend du temps</li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h3>S3 et cdkts</h3>
+<pre><code class="python" data-trim data-noescape>
+</code></pre>
+                </section>
+
+                <section>
+                    <h3>S3 et python</h3>
+<pre><code class="python" data-trim data-noescape>
+import boto3
+# Create an S3 resource
+s3 = boto3.resource('s3')
+# Create a bucket
+s3.create_bucket(Bucket='mybucket')
+# Upload file
+with open('/tmp/hello.txt', 'rb') as file:
+    s3.Object('mybucket', 'hello_s3.txt').put(Body=file)
+# Download file
+s3.Bucket('mybucket').download_file('hello_s3.txt', 'hello.txt')
+# Delete file
+s3 = boto3.resource('s3')
+s3.Object('mybucket', 'hello_s3.txt').delete()
+</code></pre>
+                </section>
+            </section>
+            <section>
+                <section>
+                    <h2>DynamoDB</h2>
+                </section>
+
+                <section>
+                    <h3>In a nutshell 🥜</h3>
+                    <ul>
+                        <li>Base de données No-SQL clé:valeur</li>
+                        <li>Serverless : rien à gérer côté utilisateur</li>
+                        <li>Stockage <em>illimité</em> (💰💰💰💰💰💰💰💰)</li>
+                        <li>Paiement du stockage, des opérations de lecture et écriture </li>
+                        <li>Passage à l'échelle automatique</li>
+                        <li>Gestion fine des accès</li>
+                        <li>Réplication entre région possible</li>
+                        <li>Peut faire des opérations en mode ACID (atomicité, cohérence, isolation, durabilité)</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Modèle de données</h3>
+                    <img src="img/CM4/dynamoDB.jpg" class="w80" alt="">
+                </section>
+
+                <section>
+                    <h3>Modèle de données</h3>
+
+                    <ul>
+                        <li>Pas de schéma stricte pour les données. Uniquement partition key d'obligatoire et la sort key si définie</li>
+                        <li><span class="important">Partition key :</span> sert à DynamoDB à stocker l'objet (clé hashage dans un table de hachage). Si pas de sorted key, sert de <span class="important">primary key</span></li>
+                        <li><span class="important">Sorted key :</span> Permet de trier les données avec la même partition key. Avec elle, elles définissent la <span class="important">composite primary key</span>.</li>
+                        <li>GET/PUT sur les données en utilisant la primary key</li>
+                        <li>Possibilité d'avoir des indexes secondaires pour requête sur autre attributs (mais 💰💰)</li>
+                        <li>AWS gère le stockage sur différentes partitions et augmente leur nombres si nécessaire. Attention aux déséquilibres.</li>
+                    </ul>
+                    <div class="important-bloc fragment">Même si DynamoDB est serverless, le service n'est pas brainless. Définir une bonne clef primaire permet de meilleurs performance et de réduire les coûts</div>
+                </section>
+
+                <section>
+                    <h3>Cas d'utilisation</h3>
+                    <ul>
+                        <li>Vente en lignes : Amazon utilise DynamoDB pour les paniers</li>
+                        <li>Cache : stockage des états d'un programme</li>
+                        <li>Iot : états des objets</li>
+                        <li>Jeux vidéo : leaderboard en temps réel</li>
+                    </ul>                
+                </section>
+
+                <h3>DynamoDB et python</h3>
+                <pre><code class="python" data-trim data-noescape>
+import boto3
+# Get the service resource.
+dynamodb = boto3.resource('dynamodb')
+# Create the DynamoDB table.
+table = dynamodb.create_table(
+    TableName='users',
+    KeySchema=[
+        {
+            'AttributeName': 'username',
+            'KeyType': 'HASH'
+        },
+        {
+            'AttributeName': 'last_name',
+            'KeyType': 'RANGE'
+        }
+    ],
+    AttributeDefinitions=[
+        {
+            'AttributeName': 'username',
+            'AttributeType': 'S'
+        },
+        {
+            'AttributeName': 'last_name',
+            'AttributeType': 'S'
+        },
+
+    ],
+    ProvisionedThroughput={
+        'ReadCapacityUnits': 5,
+        'WriteCapacityUnits': 5
+    }
+)
+# Wait until the table exists.
+table.meta.client.get_waiter('table_exists').wait(TableName='users')
+                </code></pre>
+                </section>
+                <section>
+                <h3>DynamoDB et python</h3>
+                <pre><code class="python" data-trim data-noescape>
+import boto3
+# Get the service resource.
+dynamodb = boto3.resource('dynamodb')
+# Get the table.
+table = dynamodb.Table('users')
+# Put item to the table.
+table.put_item(
+   Item={
+        'username': 'janedoe',
+        'first_name': 'Jane',
+        'last_name': 'Doe',
+        'age': 25,
+        'account_type': 'standard_user',
+    }
+)
+# Delete item from the table.
+table.delete_item(
+    Key={
+        'username': 'janedoe',
+        'last_name': 'Doe'
+    }
+)
+                </code></pre>
+                </section>
+                <section>
+                    <h3>DynamoDB et python</h3>
+                    <pre><code class="python" data-trim data-noescape>
+import boto3
+# Get the service resource.
+dynamodb = boto3.resource('dynamodb')
+# Get the table.
+table = dynamodb.Table('users')
+# Batch writing item. Only one big query, cost less ans it's quicker
+with table.batch_writer() as batch:
+for i in range(50):
+    batch.put_item(
+        Item={
+            'account_type': 'anonymous',
+            'username': 'user' + str(i),
+            'first_name': 'unknown',
+            'last_name': 'unknown'
+        }
+    )
+                    </code></pre>
+                    </section>
+                <section>
+                    <h3>DynamoDB et python</h3>
+                    <pre><code class="python" data-trim data-noescape>
+import boto3
+# Get the service resource.
+dynamodb = boto3.resource('dynamodb')
+# Get the table.
+table = dynamodb.Table('users')
+# Get item from the table.
+response = table.get_item(
+    Key={
+        'username': 'janedoe',
+        'last_name': 'Doe'
+    }
+)
+item = response['Item']
+print(item)
+                    </code></pre>
+                    </section>
+                    <section>
+                        <h3>DynamoDB et python</h3>
+                        <pre><code class="python" data-trim data-noescape>
+import boto3
+# Get the service resource.
+dynamodb = boto3.resource('dynamodb')
+# Get the table.
+table = dynamodb.Table('users')
+# Update item from the table.
+table.update_item(
+Key={
+    'username': 'janedoe',
+    'last_name': 'Doe'
+},
+UpdateExpression='SET age = :val1',
+ExpressionAttributeValues={
+    ':val1': 26
+}
+)
+                        </code></pre>
+                        </section>
+            </section>
+
+            <section>
+                <h2>That's all folks</h2>
+                <img src="https://media.giphy.com/media/7yojoQtevjOCI/giphy-downsized.gif"
+                    alt="" class="plain no-print">
+            </section>
+
+        </div>
+    </div>
+
+    <script src="reveal/dist/reveal.js"></script>
+    <script src="reveal/plugin/highlight/highlight.js"></script>
+    <script src="reveal/plugin/zoom/zoom.js"></script>
+    <script src="reveal/plugin/notes/notes.js"></script>
+    <script src="reveal/plugin/search/search.js"></script>
+
+    <script>
+
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            viewDistance: 3,
+            width: 1600,
+            height: 900,
+            slideNumber: 'c/t',
+            pdfSeparateFragments: false,
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>
