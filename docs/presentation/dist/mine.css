@@ -1,0 +1,146 @@
+body {
+	background-image: url("https://healermikado.github.io/Cours-Ensai-Informatique/presentations/img/ensai_logo_transparent.png");
+	background-repeat:no-repeat;
+	background-size: 10% auto;
+    background-position: 1% 99%;
+
+}
+
+.starWars{
+color: deepskyblue !important;
+    text-align: left !important;
+    font-size: larger !important;
+}
+
+.important{
+  color : #cb4b16;
+  font-weight: bold !important;
+}
+
+.important-purple{
+    color : #ff4bff ;
+    font-weight: bold !important;
+  }
+
+.red{
+    color : #b80e02
+}
+
+.green{
+    color : #00aa00
+}
+
+.purple{
+    color : #b805ff
+}
+
+.w100{
+    width: 100% !important;
+}
+
+.w80{
+    width: 80% !important;
+}
+
+.w70{
+    width: 70% !important;
+}
+
+.w95{
+    width: 95% !important;
+}
+.w60{
+    width: 60% !important;
+}
+.w50{
+    width: 50% !important;
+}
+
+.w40{
+    width: 40% !important;
+}
+
+.ftsz80{
+    font-size: 80%!important;
+}
+
+.important-bloc{
+    border:solid 0.1em #ff695e !important;
+    background-color: #ffdada;
+    padding: 0.2em 0em !important;
+    margin: 0.3em 0em !important;
+    color: black !important;
+    font-weight: bold !important;
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+    }
+
+.important-bloc-purple{
+    border:solid 0.1em #ec5eff !important;
+    background-color: #fddaff;
+    padding: 0.2em 0em !important;
+    margin: 0.3em 0em !important;
+    color: black !important;
+    font-weight: bold !important;
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
+
+img.icon{
+    background: none !important;
+    margin: initial !important;
+    vertical-align: middle;
+}
+
+.reveal .slides section .fragment.highlight-important,
+.reveal .slides section .fragment.highlight-important-purple,
+.reveal .slides section .fragment.highlight-current-important {
+  opacity: 1;
+  visibility: inherit; }
+
+.reveal .slides section .fragment.highlight-important.visible {
+  color: #ff0083; }
+
+.reveal .slides section .fragment.highlight-important-purple.visible {
+color: #ff4bff; }
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  color: #6c71c4 !important;
+}
+
+.green-box{
+    border : solid 5px !important;
+    border-color: #55ff55 !important;
+    padding: 0.2em !important;
+}
+  
+.note{
+    font-size: smaller !important;
+    font-style: italic !important;
+}
+
+.container{
+    display: flex;
+}
+.col{
+    flex: 1;
+}
+.important-box {
+    border:solid 0.2em #ff67cc  !important;
+    padding: 0.2em !important;
+    margin-top: 0.2em !important;
+    margin-bottom: 0.2em !important;
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
+
+.reveal pre code {
+    display: block;
+    padding: 5px;
+    overflow: auto;
+    max-height: 800px !important;
+    word-wrap: normal; }
+
+    

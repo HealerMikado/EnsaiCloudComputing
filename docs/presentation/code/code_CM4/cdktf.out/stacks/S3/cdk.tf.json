@@ -1,0 +1,59 @@
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "S3",
+      "version": "0.15.5"
+    },
+    "outputs": {
+    }
+  },
+  "provider": {
+    "aws": [
+      {
+        "region": "us-east-1"
+      }
+    ]
+  },
+  "resource": {
+    "aws_dynamodb_table": {
+      "DynamodDB-table": {
+        "//": {
+          "metadata": {
+            "path": "S3/DynamodDB-table",
+            "uniqueId": "DynamodDB-table"
+          }
+        },
+        "attribute": [
+          {
+            "name": "username",
+            "type": "S"
+          },
+          {
+            "name": "lastename",
+            "type": "S"
+          }
+        ],
+        "billing_mode": "PROVISIONED",
+        "hash_key": "username",
+        "name": "user_score",
+        "range_key": "lastename",
+        "read_capacity": 5,
+        "write_capacity": 5
+      }
+    }
+  },
+  "terraform": {
+    "backend": {
+      "local": {
+        "path": "/home/veda/EnsaiCloudComputing/docs/presentation/code/code_CM3/terraform.S3.tfstate"
+      }
+    },
+    "required_providers": {
+      "aws": {
+        "source": "aws",
+        "version": "4.57.1"
+      }
+    }
+  }
+}

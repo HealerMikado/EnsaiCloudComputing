@@ -1,0 +1,376 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Cloud Computing, CM2</title>
+
+    <meta name="description" content="Cloud Computing CM2 : haute dispo et Terraform">
+    <meta name="author" content="Rémi Pépin">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="dist/reset.css">
+    <link rel="stylesheet" href="dist/reveal.css">
+    <link rel="stylesheet" href="dist/mine.css">
+    <link rel="stylesheet" href="dist/theme/solarized.css" id="theme">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="plugin/highlight/monokai.css">
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <section>
+                    <h1>Cloud Computing, CM2</h1>
+                    <h2>Infrastructure as Code</h2>
+                    <p>Pépin Rémi, Ensai, 2023</p>
+                    <p>remi.pepin@ensai.fr</p>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Haute disponibilité</h2>
+                </section>
+
+                <section>
+                    <h3>Infrastructure du Cloud</h3>
+                    <ul>
+                        <li>Régions : emplacement "physique" dans le monde qui regroupe des zones de disponibilité (<em>Availability Zone</em>, AZ)</li>
+                        <li>Zones de disponibilité : data centers logiques</li>
+                        <li>Zones locales : data centers spécifiques pour rapprocher calcul du client</li>
+                        <li>Emplacements périphériques : points de présence pour services spécifiques (cache)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Infrastructure du Cloud</h3>
+                    <ul>
+                        <li>Si une région tombe cela n'impacte pas les autres</li>
+                        <li>Si une AZ tombe, cela n'impacte pas les autres AZ</li>
+                        <li>Les régions sont indépendantes : pas les mêmes services, peu de services permettent le cross region.</li>
+                        <li>Tous les AZ d'une même région ont les mêmes services</li>
+                    </ul>
+                    <div class="important-bloc fragment">Déployer une application sur plusieurs AZs/régions permet de limiter les crashs à cause du CP</div>
+                </section>
+
+                <section>
+                    <h3>Utilisation d'un service au cours du temps</h3>
+                    <img class="w60" src="img/CM2/utilisation service.jpg" alt="">
+                </section>
+
+                <section>
+                    <h3>Déploiement sur une seule machine</h3>
+                    <img class="w60" src="img/CM2/utilisation service perdu.jpg" alt="">
+                </section>
+
+                <section>
+                    <h3>Déploiement sur une flotte élastique de machine</h3>
+                    <img class="w60" src="img/CM2/utilisation service ASG.jpg" alt="">
+                </section>
+
+                <section>
+                    <h3>Modèle de déploiement</h3>
+                    <div class="container">
+                        <div class="col">
+                            <p>Machine unique</p>
+                            <ul>
+                                <li> <span class="red">Désavantages</span>
+                                    <ul>
+                                        <li>Facturation élevée</li>
+                                        <li>Reprise sur erreur</li>
+                                    </ul>
+                                </li>
+                                <li> <span class="green">Avantages</span>
+                                    <ul>
+                                        <li>Simple à mettre en place</li>
+                                        <li>Application statefull</li>
+                                    </ul>
+                                </li>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col">
+                            <p>Flotte de machines</p>
+                            <ul>
+                                <li> <span class="red">Désavantages</span>
+                                    <ul>
+                                        <li>Ajoute de la complexité</li>
+                                        <li>Monitorer une flotte de machine</li>
+                                        <li>Application stateless</li>
+                                    </ul>
+                                </li>
+                                <li> <span class="green">Avantages</span>
+                                    <ul>
+                                        <li>Permet de faire des économies</li>
+                                        <li>Permet haute disponibilité</li>
+                                    </ul>
+                                </li>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Auto-Scaling Group + Load Balancer</h3>
+                    <img src="../Labs/Lab 1 - EC2 base/img/ELB+ASG.jpg" class="w40"
+                        alt="">
+                </section>
+
+                <section>
+                    <h3>Auto-Scaling Group + Load Balancer</h3>
+                    <ul>
+                        <li><span class="important">Auto-Scaling Group :</span> gère une
+                            flotte d'EC2. Peut en lancer/éteindre en fonction de
+                            conditions (heures, utilisation CPU, RAM), ou si une machine
+                            est considérée comme ko</li>
+                        <li><span class="important">Load Balancer :</span> composant qui
+                            répartit le traffic entre plusieurs machines. Permet un point
+                            d'entrée unique pour accéder à une flotte. Équilibre le
+                            traffic, et peut renvoyer un utilisateur vers la même machine
+                            (sticky session) </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Auto-Scaling Group + Load Balancer</h3>
+                    <ul>
+                        <li>Haute disponibilité</li>
+                        <li>Élasticité horizontale</li>
+                        <li>Appli sur plusieurs AZs</li>
+                        <li>Permet de faire des économies</li>
+                        <li>Nécessite d'être pris en compte dans le code</li>
+                        <li>Pour la partie traitement, pas stockage</li>
+                    </ul>
+                    <div class="important-bloc fragment">Pattern courant pour assurer
+                        haute disponibilité</div>
+                </section>
+
+            </section>
+
+            <section>
+                <section>
+                    <h2>Infrastructure as Code (IaC)</h2>
+                </section>
+
+                <section>
+                    <h3>Un constat</h3>
+                    <ul>
+                        <li>⏳ Fastidieux</li>
+                        <li>🐇 Réplication ?</li>
+                        <li>📚 Versionnable ?</li>
+                        <li>🎼 Orchestration ?</li>
+                        <li>🤔 Ai-je bien tout éteint ?</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Infrastructure as Code</h3>
+                    <div class="important-bloc">L'Infrastructure as Code (IaC) consiste à
+                        définir son architecture informatique comme du code. Au lieu de
+                        naviguer sur une interface, les services à déployer seront définis
+                        dans des fichiers via un langage spécifique. Ce code pourra ainsi
+                        être versionné et redéployé à l'infini.</div>
+
+                    <ul class="fragment">
+                        <li>Terraform (cross plateforme)</li>
+                        <li>Amazon Cloud Formation, Amazon Serverless Application Manager
+                        </li>
+                        <li>Azure Resource Manager</li>
+                        <li>Google Cloud Deployment Manager</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Terraform</h3>
+                    <ul>
+                        <li>Projet open source crée par HashiCorp</li>
+                        <li>Langage de configuration (HCL)/CDK pour code</li>
+                        <li>Terraform provider pour traduction</li>
+                        <li>Utilise les API des différents systèmes</li>
+                    </ul>
+                    <img src="https://developer.hashicorp.com/_next/image?url=https%3A%2F%2Fcontent.hashicorp.com%2Fapi%2Fassets%3Fproduct%3Dterraform%26version%3Drefs%252Fheads%252Fv1.3%26asset%3Dwebsite%252Fimg%252Fdocs%252Fintro-terraform-apis.png%26width%3D2048%26height%3D644&w=2048&q=75"
+                        alt="">
+                </section>
+
+                <section>
+                    <h3>Configuration language vs CDKTF</h3>
+                    <ul>
+                        <li>HashiCorp Configuration Language (HCL) : pas json ni yaml
+                            (existe une version json)</li>
+                        <li>CDKTF : bibliothèques pour coder son architecture dans son
+                            langage de prédilection</li>
+                    </ul>
+                    <div class="fragment important">Pour ne pas apprendre un nouveau
+                        langage, nous allons utiliser le CDKTF</div>
+                    <img src="https://developer.hashicorp.com/_next/image?url=https%3A%2F%2Fcontent.hashicorp.com%2Fapi%2Fassets%3Fproduct%3Dterraform-cdk%26version%3Dv0.15.5%26asset%3Dwebsite%252Fdocs%252Fcdktf%252Fterraform-platform.png%26width%3D1776%26height%3D1317&w=1920&q=75"
+                        alt="" class="w50">
+                </section>
+
+                <section>
+                    <h3>CDKTF</h3>
+                    <img src="img/CM2/cdktf.jpg" alt="">
+                </section>
+
+                <section>
+                    <h3>Exemple</h3>
+                    <pre><code data-trim data-noescape class="python">
+from constructs import Construct
+from cdktf import App, NamedRemoteWorkspace, TerraformStack, TerraformOutput, RemoteBackend
+from cdktf_cdktf_provider_aws.provider import AwsProvider
+from cdktf_cdktf_provider_aws.instance import Instance, InstanceEbsBlockDevice
+
+class MyStack(TerraformStack):
+    def __init__(self, scope: Construct, ns: str):
+        super().__init__(scope, ns)
+
+        AwsProvider(self, "AWS", region="us-west-1")
+        instance = Instance(self, "compute",
+                            ami="ami-01456a894f71116f2", # l'id de l'os. Pas possible de juste mettre ubuntu
+                            instance_type="t2.micro", # le type de l'instance
+                            ebs_block_device= [InstanceEbsBlockDevice(
+                                device_name="/dev/sda1",
+                                delete_on_termination=True,
+                                encrypted=False,
+                                volume_size=20,
+                                volume_type="gp2"
+                            ))
+        TerraformOutput(self, "public_ip",
+                        value=instance.public_ip,
+                        )
+
+app = App()
+stack = MyStack(app, "aws_instance")
+app.synth()
+                          </code></pre>
+                    Plus qu'a faire un "cdktf deploy" pour déployer l'architecture
+                </section>
+
+                <section>
+                    <h3>Exemple</h3>
+                    <pre><code data-trim data-noescape class="python">
+class MyStack(TerraformStack):
+    def __init__(self, scope: Construct, id: str):
+        super().__init__(scope, id)
+
+        AwsProvider(self, "AWS", region="us-east-1")
+
+        security_group = SecurityGroup(self, "sg-tp",...)
+
+        launch_template = LaunchTemplate(self, "compute",...)
+        
+        target_group = LbTargetGroup(self, "target_group",...)
+        
+        elb = Lb(self, "ELB",...)
+
+        lb_listener = LbListener(self, "lb_listener",...)
+
+        asg = AutoscalingGroup(self,"asg",...)
+
+app = App()
+MyStack(app, "cloud_commputing")
+app.synth()
+                          </code></pre>
+                </section>
+
+                <section>
+                    <h3>In a nutshell 🥜</h3>
+                    <ul>
+                        <li>Une classe qui hérite de TerraformStack</li>
+                        <li>Toutes l'infra dans le init (ou du moins accessible depuis le
+                            init)</li>
+                        <li>Objets qui représentent les services, premier param self, second
+                            un nom métier</li>
+                        <li>Les autres attributs sont les configs à remplir sur la console
+                        </li>
+                    </ul>
+                    <div class="important-bloc fragment">Allez voir la doc des classes
+                        avec un ctrl+clic</div>
+                </section>
+
+                <section>
+                    <h3>Exemple</h3>
+                    <pre><code class="python" data-trim data-noescape>
+class HightAvailabilityStack(TerraformStack):
+    def __init__(self, scope: Construct, id: str):
+        super().__init__(scope, id)
+
+        AwsProvider(self, "AWS", region="us-east-1")
+
+        security_group = SecurityGroup(self, "sg-tp")
+
+        launch_template = LaunchTemplate(self, "compute",...)
+        
+        target_group = LbTargetGroup(self, "target_group",...)
+        
+        elb = Lb(self, "ELB",...)
+
+        lb_listener = LbListener(self, "lb_listener", ...)
+
+        asg = AutoscalingGroup(self,"asg", ...)
+
+
+app = App()
+MyStack(app, "HightAvailabilityApp")
+app.synth()                    
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>CDKTF : TP 2 - Prise en main</h3>
+                    <p>Ce que vous allez faire</p>
+                    <ol>
+                        <li>Terminer le TP 1 si ce n'est pas fait</li>
+                        <li>Refaire le TP 1 en utilisant le CDK TerraForm</li>
+                    </ol>
+                </section>
+
+            </section>
+
+            <section>
+                <img src="https://media.giphy.com/media/xUPOqo6E1XvWXwlCyQ/giphy.gif"
+                    alt="" class="plain no-print w60">
+            </section>
+
+        </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/search/search.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+
+    <script>
+
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            viewDistance: 3,
+            width: 1600,
+            height: 900,
+            slideNumber: 'c/t',
+            pdfSeparateFragments: false,
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>

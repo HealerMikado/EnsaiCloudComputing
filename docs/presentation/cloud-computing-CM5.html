@@ -1,0 +1,345 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Cloud Computing, CM5</title>
+
+    <meta name="description"
+        content="Cloud Computing CM5 : faire une API serverless.">
+    <meta name="author" content="Rémi Pépin">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="dist/reset.css">
+    <link rel="stylesheet" href="dist/reveal.css">
+    <link rel="stylesheet" href="dist/mine.css">
+    <link rel="stylesheet" href="dist/theme/solarized.css" id="theme">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="plugin/highlight/monokai.css">
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <section>
+                    <h1>Cloud Computing, CM5</h1>
+                    <h2>Faire une API dans le Cloud</h2>
+                    <p>Pépin Rémi, Ensai, 2023</p>
+                    <p>remi.pepin@ensai.fr</p>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Différent type d'architecture</h2>
+                </section>
+
+                <section>
+                    <h3>Architecture monolithique</h3>
+
+                    <img src="img/CM5/monolithe.jpg" alt="">
+                </section>
+
+                <section>
+                    <h3>Architecture monolithique</h3>
+                    <ul>
+                        <li>Un même code gère la partie présentation et service</li>
+                        <li>Fort couplage</li>
+                        <li>Difficile de passer à l'échelle seulement une partie du code
+                        </li>
+                        <li>Si un traitement prend de la ressource, c'est toute
+                            l'application qui est impactée</li>
+                        <li>Génération de la page côté serveur</li>
+                    </ul>
+                    <div class="important-bloc fragment">Les frameworks comme Django,
+                        Flask (python) ou Spring MVC, Struts (java) utilisent ce modèle.
+                        Bien pour de petites applis.</div>
+                </section>
+
+                <section>
+                    <h3>Architecture 3 tiers</h3>
+
+                    <img src="img/CM5/separee.jpg" alt="">
+                </section>
+
+                <section>
+                    <h3>Architecture 3 tiers</h3>
+                    <ul>
+                        <li>Séparation de la présentation et des services</li>
+                        <li>Communication via HTTP/HTTPS</li>
+                        <li>Difficile de passer à l'échelle seulement une partie du code
+                        </li>
+                        <li>Si un traitement prend de la ressource, c'est tout le backend
+                            qui est impactée</li>
+                    </ul>
+                    <div class="important-bloc fragment">Les frameworks comme FastAPI,
+                        FlaskRESTfull (python), Spring WEB (java)permettent de faire le
+                        backend. Le front end est en React/Angular/Vuejs</div>
+                </section>
+
+                <section>
+                    <h3>Architecture micro service</h3>
+
+                    <img src="img/CM5/micro services.jpg" alt="">
+                </section>
+
+                <section>
+                    <h3>Architecture micro service</h3>
+                    <ul>
+                        <li>Séparation de la présentation et des services entre eux</li>
+                        <li>Communication via HTTP/HTTPS</li>
+                        <li>Les services peuvent être dans des langages différents</li>
+                        <li>Possibilité de faire passer à l'échelle qu'un service</li>
+                        <li>Chaque service utilise sa base pour avoir de meilleures
+                            performances</li>
+                    </ul>
+                    <div class="important-bloc fragment">Demande de déployer et monitorer
+                        plusieurs services. Pas de centralisation de la sécurité et du
+                        monitoring</div>
+                </section>
+
+                <section>
+                    <h3>Architecture API Gateway</h3>
+
+                    <img src="img/CM5/apigateway.jpg" alt="">
+                </section>
+
+                <section>
+                    <h3>Architecture API Gateway</h3>
+                    <ul>
+                        <li>Point d'entrée unique (reverse proxy)</li>
+                        <li>Sécurité/monitoring</li>
+                        <li>Moins de certificats à gérer</li>
+                        <li>1 gateways par client (web, application, api tiers)</li>
+                        <li>Caching</li>
+                        <li>Limitation (ex X req/mois)</li>
+                    </ul>
+                    <div class="important-bloc fragment">L'API Gateway sert de point
+                        d'entrée unique pour nos services. Centralise sécurité/monitoring
+                        et permet des traitements sur les données en transit.</div>
+                </section>
+
+            </section>
+
+            <section>
+                <section>
+                    <h2>Amazon API Gateway</h2>
+                </section>
+
+                <section>
+                    <h3>Amazon API Gateway</h3>
+
+                    <ul>
+                        <li>Service serverless : pas d'infra à gérer</li>
+                        <li>REST (Stateless) ou Websocket (Stateful)</li>
+                        <li>Intégré dans l’écosystème AWS</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Vocabulaire</h3>
+
+                    <ul>
+                        <li>Ressource : entité logique accessible via une requête (/user,
+                            /post etc)</li>
+                        <li>Méthode : combinaison d'une ressource et d'un verbe HTTP (GET
+                            /user, POST /task etc)</li>
+                        <li>Stage : un état du cycle de vie de l'API (par exemple, 'dev',
+                            'prod', 'beta', 'v2'). Un API Gtw peut en avoir plusieurs.
+                            ~version</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Workflow</h3>
+                    <img src="img/CM5/API methods and integrations.jpg" alt="">
+                </section>
+
+                <section>
+                    <h3>Workflow</h3>
+                    <p>Possibilité d'agir à différents niveau du traitement. Exemple :
+                    </p>
+                    <ul>
+                        <li>Refuser une requête si un header n'est pas présent</li>
+                        <li>Authentifier un utilisateur</li>
+                        <li>Créer l'objet event de la lambda (Lambda Proxy)</li>
+                        <li>Mocker une réponse</li>
+                    </ul>
+
+                    <div class="important-bloc fragment">Dans le cas du TP vous n'allez
+                        pas modifier la requête, et seulement utiliser les Lambda Proxy
+                    </div>
+                </section>
+
+                <section>
+                    <h3>API Gateway  in a nutshell 🥜</h3>
+                    <ul>
+                        <li>✅Expose une API</li>
+                        <li>🛂Permet de centraliser sécurité, monitoring</li>
+                        <li>👨‍👨‍👧HTTP, Rest, WebSocket Api</li>
+                        <li>🦠Architecture micro service</li>
+                        <li>🔬Possibilité d'agir à toutes les étapes</li>
+                        <li>🌍Chaque endpoint peut être associé à un service différent</li>
+                        <li>⛅Avec AWS Lambda et DynamoDB possibilité de faire du 100%
+                            serverless</li>
+                    </ul>
+                </section>
+
+            </section>
+
+            <section>
+
+                <section>
+                    <h2>
+                        AWS Serverless Application Model (SAM)
+                    </h2>
+                </section>
+
+                <section>
+                    <h3>SAM in a nutshell 🥜</h3>
+                    <ul>
+                        <li>🧱Outil IaC spécifique AWS (👿)</li>
+                        <li>✅Uniquement pour le Serverless (Lambba, S3,API Gtw, DynamoDB, SQS, ...)  </li>
+                        <li>📜SAM template au forma yaml (🛑 indentation)</li>
+                        <li>🔄Version simplifiée de Cloud Formation</li>
+                        <li>🎇Permet de faire du debug en local !!</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Sam Template simplifié</h3>
+                    <pre><code class="yaml" data-trim data-noescape>
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+    Set of globals variables. Ex timeout, language etc
+
+Description:
+    A short text to explain what your template do and how it work
+
+Resources:
+    Set of resources. Basically the most important part of the template !
+
+Outputs:
+    Set of outputs like API Gtw url, lambda name, S3 buck name etc            
+                    </code></pre>
+
+                    <div class="fragment">sam deploy pour déployer tout ça</div>
+                    <div class="fragment">Ne pas hésiter à faire des recherches pour remplir le template !</div>
+
+                </section>
+
+                <section>
+                    <h3>Les autres commandes</h3>
+                    <pre><code class="sh" data-trim data-noescape>
+                        # Appeler une fonction lambda en local avec un json de test
+                        sam local invoke FunctionName --event events/event_file.json
+                        
+                        # Lancer une API Gtw en local
+                        sam local start-api
+
+                        # Récupérer les logs d'une fonction lambda
+                        sam logs -n FunctionName --stack-name sam-app
+
+                        # Supprimer toute une stack
+                        aws cloudformation delete-stack --stack-name sam-app
+                    </code></pre>
+                     
+                </section>
+
+                <section>
+                    <h3>Example - API Gtw + Lambda</h3>
+                    <pre><code class="yaml" data-trim data-noescape>
+Resources:
+  TasksApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      
+  CreateTaskFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/handlers/createTask
+      Handler: app.handler
+      Events:
+        PostTaskFunctionApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref TasksApi
+            Path: /tasks
+            Method: POST
+
+  GetTasksFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/handlers/getTasks
+      Handler: app.handler
+      Events:
+        GetTasksFunctionApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref TasksApi
+            Path: /tasks
+            Method: GET
+                    </code></pre>
+                </section>
+
+            </section>
+
+            <section>
+                <h3>TP API Gtw, Lambda et Sam
+                </h3>
+                <p>Objectifs</p>
+                <ul>
+                    <li>Développer une application simple à base de micros services</li>
+                    <li>Servira d'exemple pour le TP noté</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <img src="https://media.giphy.com/media/xUPOqo6E1XvWXwlCyQ/giphy.gif"
+                    alt="" class="plain no-print w60">
+            </section>
+
+        </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/search/search.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+
+    <script>
+
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            viewDistance: 3,
+            width: 1600,
+            height: 900,
+            slideNumber: 'c/t',
+            pdfSeparateFragments: false,
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealHighlight]
+        });
+
+    </script>
+
+</body>
+
+</html>

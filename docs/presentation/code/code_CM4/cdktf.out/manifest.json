@@ -1,0 +1,13 @@
+{
+  "version": "0.15.5",
+  "stacks": {
+    "S3": {
+      "name": "S3",
+      "constructPath": "S3",
+      "workingDirectory": "stacks/S3",
+      "synthesizedStackPath": "stacks/S3/cdk.tf.json",
+      "annotations": [],
+      "dependencies": []
+    }
+  }
+}
