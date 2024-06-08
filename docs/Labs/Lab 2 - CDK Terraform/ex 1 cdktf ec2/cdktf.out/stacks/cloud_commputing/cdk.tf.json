@@ -1,0 +1,113 @@
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "cloud_commputing",
+      "version": "0.20.7"
+    },
+    "outputs": {
+      "cloud_commputing": {
+        "public_ip": "public_ip"
+      }
+    }
+  },
+  "output": {
+    "public_ip": {
+      "value": "${aws_instance.ec2.public_ip}"
+    }
+  },
+  "provider": {
+    "aws": [
+      {
+        "region": "us-east-1"
+      }
+    ]
+  },
+  "resource": {
+    "aws_instance": {
+      "ec2": {
+        "//": {
+          "metadata": {
+            "path": "cloud_commputing/ec2",
+            "uniqueId": "ec2"
+          }
+        },
+        "ami": "ami-080e1f13689e07408",
+        "instance_type": "t2.micro",
+        "key_name": "vockey",
+        "security_groups": [
+          "${aws_security_group.sg-tp.name}"
+        ],
+        "tags": {
+          "Name": "EC2 daap"
+        }
+      }
+    },
+    "aws_security_group": {
+      "sg-tp": {
+        "//": {
+          "metadata": {
+            "path": "cloud_commputing/sg-tp",
+            "uniqueId": "sg-tp"
+          }
+        },
+        "egress": [
+          {
+            "cidr_blocks": [
+              "0.0.0.0/0"
+            ],
+            "description": null,
+            "from_port": 0,
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "-1",
+            "security_groups": null,
+            "self": null,
+            "to_port": 0
+          }
+        ],
+        "ingress": [
+          {
+            "cidr_blocks": [
+              "0.0.0.0/0"
+            ],
+            "description": null,
+            "from_port": 22,
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "TCP",
+            "security_groups": null,
+            "self": null,
+            "to_port": 22
+          },
+          {
+            "cidr_blocks": [
+              "0.0.0.0/0"
+            ],
+            "description": null,
+            "from_port": 80,
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "TCP",
+            "security_groups": null,
+            "self": null,
+            "to_port": 80
+          }
+        ]
+      }
+    }
+  },
+  "terraform": {
+    "backend": {
+      "local": {
+        "path": "/home/remi/EnsaiCloudComputing/cours/docs/Labs/Lab 2 - CDK Terraform/ex 1 cdktf ec2/terraform.cloud_commputing.tfstate"
+      }
+    },
+    "required_providers": {
+      "aws": {
+        "source": "aws",
+        "version": "5.45.0"
+      }
+    }
+  }
+}

@@ -32,7 +32,7 @@
                 <section>
                     <h1>Cloud Computing, CM1</h1>
                     <h2>Introduction au Cloud Computing</h2>
-                    <p>Pépin Rémi, Ensai, 2023</p>
+                    <p>Pépin Rémi, Ensai, 2024</p>
                     <p>remi.pepin@ensai.fr</p>
                 </section>
             </section>
@@ -46,12 +46,12 @@
                 <section>
                     <h3>But du cours</h3>
                     <div class="important-bloc">
-                        Vous faire développer une application simple en utilisant les
+                        Vous faire déployer une application complexe en utilisant les
                         outils offerts par un cloud provider
                     </div>
                     <ul class="fragment">
                         <li>Se familiariser avec le cloud computing</li>
-                        <li>Produire une application "complexe"</li>
+                        <li>Produire une application non monoloithique</li>
                         <li>Déployer une architecture via un outil Infrastructure as Code</li>
                     </ul>
                 </section>
@@ -59,11 +59,12 @@
                 <section>
                     <h3>Le programme</h3>
                     <ol>
-                        <li>Les bases du cloud computing⛅</li>
+                        <li>Les bases du Cloud Computing⛅</li>
                         <li>L'Infrastructure as Code avec Terraform 🪐</li>
                         <li>Function as a Service avec AWS Lambda 👩‍🏭</li>
                         <li>Event processing aws AWS SQS 🚿</li>
                         <li>Stockage NoSql avec DynamoDB 🧨</li>
+                        <li>Stockage objet avec Amzon S3 🪣</li>
                         <li>Un TP noté final sur plusieurs séances👩‍💻👨‍💻</li>
                     </ol>
                 </section>
@@ -83,7 +84,7 @@
                     <h3>Disclaimer</h3>
 
                     <ul>
-                        <li>Le sujet est vaste et on a que 21h TP compris</li>
+                        <li>Le sujet est vaste et on a que 21h, TP compris</li>
                         <li>Si des choses ne vous semblent pas claires posez-moi des questions</li>
                         <li>Entraidez-vous !</li>
                     </ul>
@@ -128,7 +129,7 @@
                         <li>Plus de flexibilité car les clients ne sont pas dépendants
                         </li>
                     </ul>
-                    <div class="important-bloc fragment">Chacun fait ses traitements sur ton poste</div>
+                    <div class="important-bloc fragment">Chacun fait ses traitements sur son poste</div>
                 </section>
 
                 <section>
@@ -163,7 +164,7 @@
 
                     <ul class="fragment">
                         <li>Cloud compute revenue in 2018 : 182,4 G$ </li>
-                        <li>Cloud compute revenue in 2018 : 544 G$ </li>
+                        <li>Cloud compute revenue in 2024 : 670 G$ </li>
                     </ul>
                     <div class="important-bloc fragment">Grosse révolution mais demande des compétences encore rares</div>
                 </section>
@@ -214,9 +215,9 @@
                     <ul class="fragment">
                         <li>Les VMs sont isolées les unes des autres</li>
                         <li>Elles peuvent avoir leur propre OS</li>
-                        <li>Elle ne savent pas qu'elles sont des VM</li>
-                        <li>Ont leur propre ressource</li>
-                        <li>On va installer sur chaque VM un serveur particulier</li>
+                        <li>Elles ne savent pas qu'elles sont des VM</li>
+                        <li>Ont leurs propres ressources</li>
+                        <li>On va installer sur chaque VM un service particulier</li>
                     </ul>
                 </section>
                 <section>
@@ -224,14 +225,14 @@
                     <ul>
                         <li><span class="green">Avantages </span> :
                             <ul>
-                                <li>Meilleur utilisation des ressources</li>
+                                <li>Meilleure utilisation des ressources</li>
                                 <li>Plusieurs OS peuvent coexister</li>
-                                <li>Facile à migrer, déployer avec les solutions type
+                                <li>Facile à migrer, déployer, monitorer avec les solutions type
                                     VMware, HyperV</li>
                             </ul>
                         <li><span class="red">Inconvénients </span> :
                             <ul>
-                                <li>Si une machine tombe plusieurs services tombent</li>
+                                <li>Si une machine physique tombe plusieurs services tombent</li>
                                 <li>Il y a des risques de failles de sécurité</li>
                             </ul>
                     </ul>
@@ -241,7 +242,7 @@
                     <h3>Cloud computing definition</h3>
                     <div class="important-bloc">
                         Cloud computing is Internet-based computing, whereby shared
-                        resources, software,
+                        resources, softwares,
                         and information are provided to computers and other devices on
                         demand, like the electricity grid. Cloud computing is a style of
                         computing in which
@@ -270,7 +271,7 @@
                         <li>🤸‍♀️ Flexibilité et favorise l'innovation</li>
                         <li>🔧 Maintenance et sécurité du hardware à la charge du cloud
                             provider</li>
-                        <li>🔬 Mise à jour régulière et nouveaux services ajoutés
+                        <li>🔬 Mises à jour régulières et nouveaux services ajoutés
                             continuellement </li>
                     </ul>
                 </section>
@@ -282,7 +283,7 @@
                         <li>🍝 Les architectures cloud peuvent vite devenir une assiette
                             de spaghetti</li>
                         <li>🤯 Trop de services disponibles</li>
-                        <li>🧙‍♂️ Pas de magie, il comprendre les outils utilisés</li>
+                        <li>🧙‍♂️ Pas de magie, il faut comprendre les outils utilisés</li>
                     </ul>
                 </section>
 
@@ -290,19 +291,19 @@
                     <h3>Les types de services</h3>
                     <ul>
                         <li class="fragment">
-                            <span class="important">IaaS (Infrastructure as a Service) :</span> fourni briques
+                            <span class="important">IaaS (Infrastructure as a Service) :</span> fournit briques
                             élémentaires (réseau, VM, stockage etc). Il faut tout
                             construire par dessus. Ce sont les Legos du cloud
                         </li>
                         <li class="fragment">
-                            <span class="important">PaaS (Platform as a Service) :</span> fourni une plateforme déjà
+                            <span class="important">PaaS (Platform as a Service) :</span> fournit une plateforme déjà
                             packagée prête à être utilisée. Souvent il n'y a pas
                             d'interface, et l'utilisation se limite à des commandes bas
                             niveau. Ce sont les Playmobiles du cloud.
                         </li>
                         <li class="fragment">
-                            <span class="important">SaaS (Software as a Service) :</span> fourni un service prêt à
-                            l'emploi. Pas besoin de savoir comment ça marche, vous être
+                            <span class="important">SaaS (Software as a Service) :</span> fournit un service prêt à
+                            l'emploi. Pas besoin de savoir comment ça marche, vous êtes
                             juste l'utilisateur final. Ce sont les Funko Pop du cloud.
                         </li>
                     </ul>
@@ -328,8 +329,8 @@
                             <p>Les spécialisés (PaaS)</p>
                             <ul>
                                 <li>Heroku : déploiement d'appli web</li>
-                                <li>Dataiku : analyse de donnée</li>
-                                <li>Databricks : analyse de donnée avec Spark</li>
+                                <li>Dataiku : analyse de données</li>
+                                <li>Databricks : analyse de données avec Spark</li>
                                 <li>pythonanywhere : pour code python</li>
                             </ul>
                         </div>
@@ -405,7 +406,7 @@
                     <ul>
                         <li>Filtre les connexions entrantes/sortantes</li>
                         <li>Si ce n'est pas autorisé c'est interdit</li>
-                        <li>Statefull (autorisé automatique du trajet retour)</li>
+                        <li>Stateful (autorisé automatique du trajet retour)</li>
                         <li>Triplet : protocole, port, plage d'ip</li>
                     </ul>
 

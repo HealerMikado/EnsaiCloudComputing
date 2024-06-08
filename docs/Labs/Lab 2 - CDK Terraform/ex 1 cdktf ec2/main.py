@@ -12,6 +12,41 @@ class MyStack(TerraformStack):
 
         AwsProvider(self, "AWS", region="us-east-1")
 
+        security_group = SecurityGroup(
+            self, "sg-tp",
+            ingress=[
+                SecurityGroupIngress(
+                    from_port=22,
+                    to_port=22,
+                    cidr_blocks=["0.0.0.0/0"],
+                    protocol="TCP",
+                ),
+                SecurityGroupIngress(
+                    from_port=80,
+                    to_port=80,
+                    cidr_blocks=["0.0.0.0/0"],
+                    protocol="TCP"
+                )
+            ],
+            egress=[
+                SecurityGroupEgress(
+                    from_port=0,
+                    to_port=0,
+                    cidr_blocks=["0.0.0.0/0"],
+                    protocol="-1"
+                )
+            ]
+            )
+
+        instance = Instance(
+            self, "ec2",
+            ami="ami-080e1f13689e07408",
+            instance_type="t2.micro",
+            tags={"Name" :"EC2 daap"},
+            key_name="vockey",
+            security_groups=[security_group.name]
+
+        )
 
         TerraformOutput(
             self, "public_ip",

@@ -31,8 +31,8 @@
                 <section>
                     <h1>Cloud Computing, CM2</h1>
                     <h2>Infrastructure as Code</h2>
-                    <p>Pépin Rémi, Ensai, 2023</p>
-                    <p>remi.pepin@ensai.fr</p>
+                    <p>Pépin Rémi, Ensai, 2024</p>
+                    <p>remi.pepin@insee.fr</p>
                 </section>
             </section>
 
@@ -45,7 +45,7 @@
                     <h3>Infrastructure du Cloud</h3>
                     <ul>
                         <li>Régions : emplacement "physique" dans le monde qui regroupe des zones de disponibilité (<em>Availability Zone</em>, AZ)</li>
-                        <li>Zones de disponibilité : data centers logiques</li>
+                        <li>Zones de disponibilité : data centers logiques, les ressources de différentes AZ sont isolées les unes des autres</li>
                         <li>Zones locales : data centers spécifiques pour rapprocher calcul du client</li>
                         <li>Emplacements périphériques : points de présence pour services spécifiques (cache)</li>
                     </ul>
@@ -59,7 +59,7 @@
                         <li>Les régions sont indépendantes : pas les mêmes services, peu de services permettent le cross region.</li>
                         <li>Tous les AZ d'une même région ont les mêmes services</li>
                     </ul>
-                    <div class="important-bloc fragment">Déployer une application sur plusieurs AZs/régions permet de limiter les crashs à cause du CP</div>
+                    <div class="important-bloc fragment">Déployer une application sur plusieurs AZs/régions permet de limiter les indispos dues au Cloud Provider</div>
                 </section>
 
                 <section>
@@ -86,13 +86,13 @@
                                 <li> <span class="red">Désavantages</span>
                                     <ul>
                                         <li>Facturation élevée</li>
-                                        <li>Reprise sur erreur</li>
+                                        <li>Reprise sur erreur lente</li>
                                     </ul>
                                 </li>
                                 <li> <span class="green">Avantages</span>
                                     <ul>
                                         <li>Simple à mettre en place</li>
-                                        <li>Application statefull</li>
+                                        <li>Application stateful</li>
                                     </ul>
                                 </li>
                                 </li>

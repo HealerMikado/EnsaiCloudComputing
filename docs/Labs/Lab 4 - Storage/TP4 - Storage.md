@@ -133,15 +133,15 @@ dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('users')
 # Batch writing item. Only one big query, cost less ans it's quicker
 with table.batch_writer() as batch:
-for i in range(50):
-    batch.put_item(
-        Item={
-            'account_type': 'anonymous',
-            'username': 'user' + str(i),
-            'first_name': 'unknown',
-            'last_name': 'unknown'
-        }
-    )
+    for i in range(50):
+        batch.put_item(
+            Item={
+                'account_type': 'anonymous',
+                'username': 'user' + str(i),
+                'first_name': 'unknown',
+                'last_name': 'unknown'
+            }
+        )
 ```
 
 Si tous à l'air de s'être bien passé, requêtez la table pour compter le nombre de ligne. Voici le code à exécuter :

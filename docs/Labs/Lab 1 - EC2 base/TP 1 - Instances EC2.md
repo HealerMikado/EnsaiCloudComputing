@@ -19,7 +19,7 @@ Encore une chose, le TP est sûrement trop long être fait sur une séance. Si c
 
 ## Connexion à la console AWS
 
-1. Connectez vous à la plateforme AWS academy : https://www.awsacademy.com avec les identifiants que vous avez crée et sélectionnez le cours AWS Academy Learner Lab [43226].
+1. Connectez vous à la plateforme AWS academy : https://www.awsacademy.com avec les identifiants que vous avez crée et sélectionnez le cours.
 2. Cliquez sur `Modules` puis `Learner Lab` 
 3. Ensuite cliquez sur `Start Lab`. Une fois le lab lancé (pastille verte à gauche), cliquez sur `AWS Details` et `Download PEM`. Cela va télécharger la clé privé qui permettra d'établir des connexions SSH pendant le TP.
 4. Enfin cliquez sur `AWS`
@@ -36,7 +36,7 @@ Encore une chose, le TP est sûrement trop long être fait sur une séance. Si c
 
    - **Nom et balise** : donnez un nom à votre instance. Ex : Ma première instance
 
-   - **Images d'applications et de systèmes d'exploitation (Amazon Machine Image)** : c'est ici que vous allez choisir le système d'exploitation de votre machine. Vous allez choisir une machine `Ubuntu` et laisser la version 22.04 sélectionnée par défaut.
+   - **Images d'applications et de systèmes d'exploitation (Amazon Machine Image)** : c'est ici que vous allez choisir le système d'exploitation de votre machine. Vous allez choisir une machine `Ubuntu` et laisser la version 24.04 sélectionnée par défaut.
 
    - **Type d'instance** : regardez les différents types d'instances disponibles. Par défaut l'instance t2.micro est sélectionnée. C'et une petite instance avec 1 vCpu (~1 coeur) et 1Go de Ram qui conviendra parfaitement pour le TP. La famille des instances "t" sont pour un usage général, et peuvent en cas de besoin se voir allouer plus de CPU (mais le prix augmentera). Mais si vous le souhaitez vous pouvez prendre une t3.xlarge (4vCPU, 16 Go Ram, 0,16\$/h) voir une c6in.xlarge (32 vCPU, 64 Go Ram, 1,8\$/h). Si vous voulez jouer ne prenez pas une machine avec plus de 32 vCPU.
 
@@ -52,7 +52,7 @@ Encore une chose, le TP est sûrement trop long être fait sur une séance. Si c
 
    Une fois cela fait vous pouvez lancer votre instance en cliquant sur `Lancer l'instance`. Après quelques secondes un écran affichant que votre lancement est réussi devrait apparaître. Cliquez sur `Affichez toutes les instances`
 
-3. Une fois sur le dahsboard de vos instances, cliquez sur l'id de votre instance pour arriver sur son dashboard et copiez son `Adresse IPv4 publique`.
+3. Une fois sur le dashboard de vos instances, cliquez sur l'id de votre instance pour arriver sur son dashboard et copiez son `Adresse IPv4 publique`.
 
 4. Vous allez maintenance vous connecter à votre instance.
 
@@ -87,16 +87,16 @@ Encore une chose, le TP est sûrement trop long être fait sur une séance. Si c
    - `sudo apt update` : pour mettre à jouer les dépôts de paquets. Cela permet à votre machine de savoir ce qu'elle peut installer
    - `sudo apt install python3-pip`: pour installer pip. Python est déjà présent sur la machine mais pas pip
    - `cd Ensai-CloudComputingLab1` : pour vous placer dans le répertoire du webservice
-   - `sudo pip3 install -r requirements.txt` : pour installer les dépendances python
-   - `sudo python3 app.py` : pour lancer finalement le webservice
+   - `pip3 install -r requirements.txt` : pour installer les dépendances python
+   - `python3 app.py` : pour lancer finalement le webservice
 
-   > 🧙‍♂️`sudo` permet de lancer une commande en mode "super utilisateur"  ou "root" (= administrateur dans le monde windows). Les commandes de type `apt` sont toujours lancées en root. Pour les commandes `pip3` et `python` ce n'est pas systématiquement le cas, mais dans le cadre de l'exercice comme notre webservice va être accessible depuis tout internet, il nous faut lancer le code en root, et également installer les packages python en root.
+   > 🧙‍♂️`sudo` permet de lancer une commande en mode "super utilisateur"  ou "root" (= administrateur dans le monde windows). Les commandes de type `apt` sont toujours lancées en root.
 
    Ouvrez un navigateur web ou Insomnia sur votre ordinateur et faite une requête à la page `http://[adresseIPv4]/task` en remplaçant `[adresseIPv4]` par l'adresse IPv4 de votre instance. Vous devrez arriver sur une page contenant 3 éléments.
 
 2. Maintenant vous allez éteindre votre instance. Sur la page de l'instance faites `Etat de l'instance` > `Arrêter l'instance`. Attendez quelques instants et rafraichissez la page. Normalement elle devrait avoir comme état `Arrêté(e)` et ne plus avoir de `DNS IPv4 Public`. Vérifiez que votre webservice n'est plus accessible.
 
-3. Relancez votre instance avec `Etat de l'instance` > `Démarrer l'instance`. Regardez les adresses publiques de votre instance, elle devrait avoir changé ! Connectez vous à votre instance comme précédemment mais en faisant attention d'utiliser la nouvelle adresse. Une fois connectez à l'instance faite un `ls` (listing) pour voir que le dossier du webservice est toujours présent, puis un `cd Ensai-CloudComputingLab1` pour vous placer dans le dossier. Comme l'instance a été éteinte il faut relancer le webservice, mais comme toutes les dépendances ont été installées, il suffit de faire `sudo python3 app.py`. Accédez à votre webservice en utilisant la nouvelle adresse publique de votre machine.
+3. Relancez votre instance avec `Etat de l'instance` > `Démarrer l'instance`. Regardez les adresses publiques de votre instance, elle devrait avoir changé ! Connectez vous à votre instance comme précédemment mais en faisant attention d'utiliser la nouvelle adresse. Une fois connectez à l'instance faite un `ls` (listing) pour voir que le dossier du webservice est toujours présent, puis un `cd Ensai-CloudComputingLab1` pour vous placer dans le dossier. Comme l'instance a été éteinte il faut relancer le webservice, mais comme toutes les dépendances ont été installées, il suffit de faire `python3 app.py`. Accédez à votre webservice en utilisant la nouvelle adresse publique de votre machine.
 
 4. Maintenant vous allez simplement redémarrer votre machine via l'option `Redémarrez une instance`. Le redémarrage va être quasiment instantané, et il n'y aura aucun gros changement dans le dashboard. Il vous faut néanmoins relancer votre webservice qui a été éteint dans le processus. 
 
@@ -145,7 +145,7 @@ Le but de cette partie est de gérer une flotte d'instance via un *Auto Scaling 
 
    2. Dans la partie réseau, sélectionnez au moins 2 sous-réseaux, mais vous pouvez tous les prendre si vous le souhaitez. `Suivant`
 
-      > 🧙‍♂️ Chacun de ces sous réseaux est situé dans un datacenter différent. Utiliser au moins 2 sous-réseaux assure que si un datacenter tombe nous aurons des machines toujours accessibles. Cela n'arrivera pas pendant le TP mais c'est une chose à prendre en compte dans le monde professionnel.
+      > 🧙‍♂️ Chacun de ces sous réseaux est situé dans un datacenter différent. Utilisez au moins 2 sous-réseaux assure que si un datacenter tombe nous aurons des machines toujours accessibles. Cela n'arrivera pas pendant le TP mais c'est une chose à prendre en compte dans le monde professionnel.
 
    3. Sélectionnez l'option `Attacher un nouvel équilibreur de charge`. Vous pouvez modifier le nom si vous le souhaitez. Sélectionnez comme schéma de l'équilibreur de charge `Internet-Facing`. Dans la partie `Ecouteur de routage`, cliquez sur `Sélectionner un groupe cible nouveau ou existant` puis sur `Creer un groupe cible`. Cela va associer votre *Auto Scaling Group* au *Load Balancer*. `Suivant`
 
@@ -159,10 +159,10 @@ Le but de cette partie est de gérer une flotte d'instance via un *Auto Scaling 
 
    5. Descendez au bas de la page et `Créer un groupe Auto Scaling`
 
-4. Maintenant votre *Auto Scaling Group* est créé retournez sur le dashboard des instances EC2. Vous devrez voir que vous avez 2 instances en train de se lancer. Dans un autre onglet, allez sur le dashboard `Équilibreurs de charge` et trouver votre *Load Balancer*. Cliquez dessus et copiez son `DNS name`. Dans un troisième onglet requêtez l'URL `[load balancer DNS name]/instance`. Rafraîchissez la page plusieurs fois. Vous devrez constater que l'id retourné va osciller entre deux valeurs, les valeurs des instances EC2 de votre dashboard.
+4. Maintenant votre *Auto Scaling Group* est créé retournez sur le dashboard des instances EC2. Vous devrez voir que vous avez 2 instances en train de se lancer. Dans un autre onglet, allez sur le dashboard `Équilibreurs de charge` et trouvez votre *Load Balancer*. Cliquez dessus et copiez son `DNS name`. Dans un troisième onglet. Requêtez l'URL `[load balancer DNS name]/instance`. Rafraîchissez la page plusieurs fois. Vous devrez constater que l'id retourné va osciller entre deux valeurs, les valeurs des instances EC2 de votre dashboard.
 
 5. Sur le dashboard EC2 résiliez une instance. Attendez quelques instants (environ 2min), et vous devriez voir qu'automatiquement une nouvelle instance va être démarrée pour respecter notre règle de 2 instances au minimum.
 
 6. Connectez vous à une instance et exécutez la commande suivante : `while : ; do : ; done`. Cette commande bloque votre instance et lance une boucle infinie composée de l'instruction null ` :` et saturer le CPU de la machine. Attendez quelques minutes et de nouvelle instance vont être lancées automatiquement pour conserver une globale du CPU à 50%. Vous pouvez arrêter la commande avec un `ctrl+C` et après une dizaine de minute le nombre d'instance diminuera. Comme la réduction de votre flotte prend plus temps, vous aurez du mal à voir ça en TP.
 
-Félicitation, vous venez en quelques clics de déployer un architecture simple et efficace qui s'adapte à la charge et hautement disponible car répartie sur deux datacenters. L'architecture que vous venez de créer est dites **hautement disponible** et **élastique**. En d'autres terme, elle est capable de s'adapter à la charge aussi bien en augmentant ou en diminuant le nombre de machine (élasticité), mais aussi elle va continuer à fonctionner en cas de panne massive (haute disponibilité). Il manque encore une base de données à notre application pour le moment pour quelle soit réellement intéressante. Nous verrons plus tard dans le cours comment associer un code python à une base de données hébergée sur AWS.
+Félicitation, vous venez en quelques clics de déployer un architecture simple et efficace qui s'adapte à la charge et hautement disponible car répartie sur deux datacenters. L'architecture que vous venez de créer est dites **hautement disponible** et **élastique**. En d'autres terme, elle est capable de s'adapter à la charge aussi bien en augmentant ou en diminuant le nombre de machines (élasticité), mais aussi elle va continuer à fonctionner en cas de panne massive (haute disponibilité). Il manque encore une base de données à notre application pour le moment pour quelle soit réellement intéressante. Nous verrons plus tard dans le cours comment associer un code python à une base de données hébergée sur AWS.

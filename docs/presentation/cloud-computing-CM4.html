@@ -31,8 +31,8 @@
                 <section>
                     <h1>Cloud Computing, CM4</h1>
                     <h2>Stockage de données dans le Cloud</h2>
-                    <p>Pépin Rémi, Ensai, 2023</p>
-                    <p>remi.pepin@ensai.fr</p>
+                    <p>Pépin Rémi, Ensai, 2024</p>
+                    <p>remi.pepin@insee.fr</p>
                 </section>
             </section>
 
@@ -71,7 +71,7 @@
                             Cloud SQL</li>
                         <li><span class="important">Base de données no-SQL :</span> pour
                             des données semi structurées voir non structurées. Interaction
-                            avec les données possibles, par contre plus de jointure. AWS
+                            avec les données possibles, par contre plus de jointure en général. AWS
                             DynamoDB, GCP Big Table</li>
                         <li><span class="important">Cache :</span> les données sont
                             stockées en RAM et plus sur disque. Assure une grande
@@ -125,10 +125,10 @@
                         <div class="col">
                             <ul>
                                 <li><span class="important">Traitement des données :
-                                    </span>avec AWS GLue et Amazon Athena, S3 devient
+                                    </span>avec AWS Glue et Amazon Athena, S3 devient
                                     un data lake (on peut requêter les données)</li>
                                 <li><span class="important">Cycle de vie :</span> les
-                                    données peuvent être supprimée automatiquement, passer
+                                    données peuvent être supprimées automatiquement, passer
                                     dans un autre niveau de stockage et versionnées si
                                     besoin.</li>
                             </ul>
@@ -155,114 +155,6 @@
                 </section>
 
                 <section>
-                    <h3>Les niveaux de stockage</h3>
-        <table cellspacing="0" cellpadding="1" style="font-size:x-large"> 
-            <tbody> 
-             <tr> 
-              <th>&nbsp;</th> 
-              <th style="text-align: center;">S3 Standard</th> 
-              <th style="text-align: center;">S3 Standard - IA<br> </th> 
-              <th style="text-align: center;">S3 One Zone-IA<br> </th> 
-              <th style="text-align: center;">S3 Glacier<br> Instant Retrieval<br> </th> 
-              <th style="text-align: center;">S3 Glacier<br>  Flexible Retrieval</th> 
-              <th style="text-align: center;">S3 Glacier<br> Deep Archive<br> </th> 
-             </tr> 
-             <tr> 
-              <td>Conçu pour la durabilité<br> </td> 
-              <td style="text-align: center;">99,999999999&nbsp;%<br> (11 9s)</td> 
-              <td style="text-align: center;">99,999999999&nbsp;%<br> (11 9s)</td> 
-              <td style="text-align: center;">99,999999999&nbsp;%<br> (11 9s)</td> 
-              <td style="text-align: center;">99,999999999&nbsp;%<br> (11 9s)</td> 
-              <td style="text-align: center;">99,999999999&nbsp;%<br> (11 9s)</td> 
-              <td style="text-align: center;">99,999999999&nbsp;%<br> (11 9s)</td> 
-             </tr> 
-             <tr> 
-              <td>Conçu pour la disponibilité<br> </td> 
-              <td style="text-align: center;">99,99&nbsp;%</td> 
-              <td style="text-align: center;">99,9&nbsp;%</td> 
-              <td style="text-align: center;">99,5&nbsp;%</td> 
-              <td style="text-align: center;">99,9&nbsp;%</td> 
-              <td style="text-align: center;">99,99&nbsp;%</td> 
-              <td style="text-align: center;">99,99&nbsp;%<br> </td> 
-             </tr> 
-             <tr> 
-              <td>Disponibilité SLA</td> 
-              <td style="text-align: center;">99,9&nbsp;%</td> 
-              <td style="text-align: center;">99&nbsp;%</td> 
-              <td style="text-align: center;">99&nbsp;%</td> 
-              <td style="text-align: center;">99&nbsp;%<br> </td> 
-              <td style="text-align: center;">99&nbsp;%</td> 
-              <td style="text-align: center;">99,9&nbsp;%<br> </td> 
-             </tr> 
-             <tr> 
-              <td>Zones de disponibilité</td> 
-              <td style="text-align: center;">≥3</td> 
-              <td style="text-align: center;">≥3</td> 
-              <td style="text-align: center;">1</td> 
-              <td style="text-align: center;">≥3</td> 
-              <td style="text-align: center;">≥3</td> 
-              <td style="text-align: center;">≥3</td> 
-             </tr> 
-             <tr> 
-              <td>Frais de capacité minimale par objet</td> 
-              <td style="text-align: center;">N/A</td> 
-              <td style="text-align: center;">128&nbsp;Ko</td> 
-              <td style="text-align: center;">128&nbsp;Ko</td> 
-              <td style="text-align: center;">128&nbsp;Ko</td> 
-              <td style="text-align: center;">40&nbsp;Ko</td> 
-              <td style="text-align: center;">40&nbsp;Ko</td> 
-             </tr> 
-             <tr> 
-              <td>Frais minimum de durée de stockage</td> 
-              <td style="text-align: center;">N/A</td> 
-              <td style="text-align: center;">30&nbsp;jours</td> 
-              <td style="text-align: center;">30&nbsp;jours</td> 
-              <td style="text-align: center;">90&nbsp;jours</td> 
-              <td style="text-align: center;">90&nbsp;jours</td> 
-              <td style="text-align: center;">180&nbsp;jours</td> 
-             </tr> 
-             <tr> 
-              <td>Frais d'extraction</td> 
-              <td style="text-align: center;">N/A<br> </td> 
-              <td style="text-align: center;">par Go extrait<br> </td> 
-              <td style="text-align: center;">par Go extrait</td> 
-              <td style="text-align: center;">par Go extrait</td> 
-              <td style="text-align: center;">par Go extrait</td> 
-              <td style="text-align: center;">par Go extrait</td> 
-             </tr> 
-             <tr> 
-              <td>Latence du premier octet</td> 
-              <td style="text-align: center;">millisecondes</td> 
-              <td style="text-align: center;">millisecondes</td> 
-              <td style="text-align: center;">millisecondes</td> 
-              <td style="text-align: center;">millisecondes</td> 
-              <td style="text-align: center;">minutes ou heures</td> 
-              <td style="text-align: center;">heures</td> 
-             </tr> 
-             <tr> 
-              <td>Type de stockage</td> 
-              <td style="text-align: center;">Objet</td> 
-              <td style="text-align: center;">Objet</td> 
-              <td style="text-align: center;">Objet</td> 
-              <td style="text-align: center;">Objet</td> 
-              <td style="text-align: center;">Objet</td> 
-              <td style="text-align: center;">Objet</td> 
-             </tr> 
-             <tr> 
-              <td>Transitions du cycle de vie</td> 
-              <td style="text-align: center;">Oui</td> 
-              <td style="text-align: center;">Oui</td> 
-              <td style="text-align: center;">Oui</td> 
-              <td style="text-align: center;">Oui</td> 
-              <td style="text-align: center;">Oui</td> 
-              <td style="text-align: center;">Oui</td> 
-             </tr> 
-            </tbody> 
-           </table> 
-          
-                </section>
-
-                <section>
                     <h3>Cas d'utilisation</h3>
                     <ul>
                         <li>Stockage pour application : photos pour un réseau social par exemple</li>
@@ -270,7 +162,7 @@
                             des outils pour traiter les données</li>
                         <li>Sauvegarde pour données critiques : chiffrement, disponibilité, durabilité, droit</li>
                         <li>Archivage de données : S3 Glacier, deep archive</li>
-                        <li>Migration : Snowcone, Snowball, Snowmobile</li>
+                        <li>Migration : Snowcone, Snowball</li>
                     </ul>
                 </section>
 
