@@ -87,8 +87,8 @@ Encore une chose, le TP est sûrement trop long être fait sur une séance. Si c
    - `sudo apt update` : pour mettre à jouer les dépôts de paquets. Cela permet à votre machine de savoir ce qu'elle peut installer
    - `sudo apt install python3-pip`: pour installer pip. Python est déjà présent sur la machine mais pas pip
    - `cd Ensai-CloudComputingLab1` : pour vous placer dans le répertoire du webservice
-   - `pip3 install -r requirements.txt` : pour installer les dépendances python
-   - `python3 app.py` : pour lancer finalement le webservice
+   - `sudo pip3 install -r requirements.txt` : pour installer les dépendances python
+   - `sudo python3 app.py` : pour lancer finalement le webservice
 
    > 🧙‍♂️`sudo` permet de lancer une commande en mode "super utilisateur"  ou "root" (= administrateur dans le monde windows). Les commandes de type `apt` sont toujours lancées en root.
 

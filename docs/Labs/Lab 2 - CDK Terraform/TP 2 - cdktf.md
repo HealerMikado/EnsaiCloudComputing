@@ -9,13 +9,13 @@ parent: Labs
 
 ## Mise en place
 
-Allez sur la plateforme AWS academy et accédez au cours AWS Academy Learner Lab [43226]. Puis cliquez sur `Modules`>`Learner Lab`. Lancez votre environnement en cliquant sur `Start Lab`. Une fois le cercle passé au vert, cliquer sur `AWS Details` et `AWS CLI`. Les clef que vous voyez vont permettre un accès programmatique à votre compte.
+Allez sur la plateforme AWS academy et accédez au cours AWS Academy Learner Lab. Puis cliquez sur `Modules`>`Learner Lab`. Lancez votre environnement en cliquant sur `Start Lab`. Une fois le cercle passé au vert, cliquer sur `AWS Details` et `AWS CLI`. Les clef que vous voyez vont permettre un accès programmatique à votre compte.
 
- Ouvrez un terminal et exécutez la commande `aws configure`. Un prompt va vous demander votre AWS Access Key ID, collez la valeur de `aws_access_key_id`. Faites de même pour la Secret Access Key. Pour la région par défaut entrez "us-east-1". Validez le dernier prompt.
+Ouvrez un terminal et exécutez la commande `aws configure`. Un prompt va vous demander votre AWS Access Key ID, collez la valeur de `aws_access_key_id`. Faites de même pour la Secret Access Key. Pour la région par défaut entrez "us-east-1". Validez le dernier prompt. Aller ensuite modifier le fichier `credentials` qui se trouve dans le dossier `.aws` (attention ce dossier est caché)
 
 Créez un dossier `cloud computing` avec la commande `mkdir "cloud computing"`. Déplacez-vous dans le dossier avec la commande `cd "cloud computing"`. Clonez le dépôt git du TP avec un `git clone https://github.com/HealerMikado/Ensai-CloudComputingLab2.git`.  Au début de chaque exercice vous allez devoir réaliser un `pipenv sync` dans le dossier de exercice. Cela va créer un environnement python et y installer toutes les dépendances de l'exercice. Pour que VScode reconnaisse les modules que vous allez utiliser, il faut lui spécifier l'interpréteur qu'il doit utiliser.  Faites un `ctrl+shif+P`, tapez `Select Interpreter` et prenez l'interpréteur `pipenv ex X cdktf ...`
 
-> 📦 À cause du fonctionnement de python cela va multiplier les environnements virtuels, et le stockage qui leur est associé. Une solution moins gourmande en espace disque mais plus "moche" est de tout faire dans l'espace du premier exercice. Par contre comme la commande `cdktf deploy` déploie le code du fichier `main.py`, il vous faudra renommer le fichier `main.py` pour que le fichier `main.py` corresponde au fichier actuel.
+> 📦 À cause du fonctionnement de python cela va multiplier les environnements virtuels, et le stockage qui leur est associé. Une solution moins gourmande en espace disque mais plus "moche" est de réutiliser toujours le même espace.
 
 ## Mon premier script avec le CDK Terraform
 
@@ -49,9 +49,9 @@ app.synth()
 
 ```
 
-Les imports sont tous les imports dont vous aurez besoin. Il ne sont pas évident à trouver, donc je vous les donnes.
+Les imports sont tous les imports dont vous aurez besoin. Ils ne sont pas évident à trouver, donc je vous les donne.
 
- La classe `MyStack` va contenir toute votre architecture. Pour associer les services que vous allez créer à votre *stack*, vous allez passer en paramètre la stack courante à tous nos objets. Ainsi **tous les objets AWS que nous allons créer vont avoir en premier argument `self`**. 
+La classe `MyStack` va contenir toute votre architecture. Pour associer les services que vous allez créer à votre *stack*, vous allez passer en paramètre la stack courante à tous nos objets. Ainsi **tous les objets AWS que vous allez créer vont avoir en premier argument `self`**. 
 
 Maintenant vous allez définir votre première ressource. La classe du cdktf associée à une instance EC2 d'AWS est la classe `Instance`. Les deux premiers arguments à passer au constructeur de la classe `Instance` sont la stack courante, et un id sous la forme d'une chaîne de caractères.
 
@@ -62,9 +62,9 @@ instance = Instance(
     self, "webservice")
 ```
 
-Ensuite via des paramètres nommées vous allez définir un peu plus en détail votre instance. Rappelez-vous, pour une instance EC2 il nous faut définir son OS (appelé AMI chez AWS) et le type d'instance.
+Ensuite via des paramètres nommés vous allez définir un peu plus en détail votre instance. Rappelez-vous, pour une instance EC2 il vous faut définir son OS (appelé AMI chez AWS) et le type d'instance.
 
-Ajoutez à votre instance son AMI avec le paramètre `ami` qui prendra comme valeur `ami-0557a15b87f6559cf` (c'est l'identifiant de l'AMI ubuntu dans la région `us-east-1`), et pour le type d'instance vous prendrez une `t2.micro`. Exécutez votre architecture avec la commande `cdktf deploy` dans le terminal. Connectez-vous au dashboard EC2 et vérifiez que votre instance est bien démarrée. Néanmoins si vous essayez de vous connectez en SSH à votre instance vous allez voir que c'est impossible. En effet lors de la définition de l'instance nous n'avons pas définis la clé SSH à utiliser, et le *security group* de l'instance. Tout cela fait que pour le moment l'instance n'est pas accessible.
+Ajoutez à votre instance son AMI avec le paramètre `ami` qui prendra comme valeur `ami-0557a15b87f6559cf` (c'est l'identifiant de l'AMI ubuntu dans la région `us-east-1`), et pour le type d'instance vous prendrez une `t2.micro`. Exécutez votre architecture avec la commande `cdktf deploy` dans le terminal. Connectez-vous au dashboard EC2 et vérifiez que votre instance est bien démarrée. Néanmoins si vous essayez de vous connectez en SSH à votre instance vous allez voir que c'est impossible. En effet lors de la définition de l'instance nous n'avons pas défini la clé SSH à utiliser, et le *security group* de l'instance. Tout cela fait que pour le moment l'instance n'est pas accessible.
 
 ### Configuration de la partie réseau
 
@@ -129,7 +129,7 @@ Le premier disque de l'instance aura ainsi un volume de 20 Go, et un second disq
 
 ## Mise en place d'un Auto Scaling Group et d'un Load Balancer
 
-Ci dessous vous trouverez l'architecture finale que vous allez mettre en place pour ce TP. Elle est un peu plus détaillée que lors du précédent TP pour faire apparaître chaque élément que vous allez devoir définir. Se détacher de l'interface graphique pour utiliser un outil IaC fait réaliser à quel point l'interface masque de nombreux détails. Tout implémenter n'est pas difficile, mais est laborieux quand on est pas guidé. Toutes les étapes sont découpées pour être unitaire et simple. Elles consistent toutes à définir un objet python avec la bonne classe et les bons paramètres. Ce n'est pas simple à trouver cela seul, alors je vous donne tout. Il suffit de suivre le TP à votre rythme.
+Ci dessous vous trouverez l'architecture finale que vous allez mettre en place pour ce TP. Elle est un peu plus détaillée que lors du précédent TP pour faire apparaître chaque élément que vous allez devoir définir. Se détacher de l'interface graphique pour utiliser un outil IaC fait réaliser à quel point la console AWS masque de nombreux détails. Tout implémenter n'est pas difficile, mais est laborieux quand on est pas guidé. Toutes les étapes sont découpées pour être unitaire et simple. Elles consistent toutes à définir un objet python avec la bonne classe et les bons paramètres. Ce n'est pas simple à trouver cela seul, alors je vous donne tout. Il suffit de suivre le TP à votre rythme.
 
 <img src="img/Architecuture finale.jpg" style="zoom: 50%;" />
 

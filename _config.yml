@@ -17,10 +17,10 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: "Cloud Computing Ensai 2022-2023"
+title: "Cloud Computing Ensai 2023-2024"
 author:
   name: Pépin Rémi
-  email: remi.pepin@ensai.fr
+  email: remi.pepin@insee.fr
 
 description: >- # this means to ignore newlines until "baseurl:"
   Ressource du cours de Cloud Computing dispensé aux élèves de seconde année de l'Ensai. Au programme introduction aux grands principes du cloud, manipulation des instances EC2, d'AWS Lambda, d'SQS, S3 et DynamoDB. Le tout en utilisant le CDK Terraform pour versionner son code.
