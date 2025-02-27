@@ -86,9 +86,12 @@ Une dernière chose, le TP est probablement trop long pour être réalisé en un
 
    - `sudo apt update` : pour mettre à jouer les dépôts de paquets. Cela permet à votre machine de savoir ce qu'elle peut installer
    - `sudo apt install python3-pip`: pour installer pip. Python est déjà présent sur la machine mais pas pip
+   - `sudo apt install python3.12-venv`: pour installer le module venv python
    - `cd Ensai-CloudComputingLab1` : pour vous placer dans le répertoire du webservice
+   - `python3 -m venv venv` : pour créer un environnement virtuel
+   - `source venv/bin/activate` : pour activer l'environnement viruel
    - `sudo pip3 install -r requirements.txt` : pour installer les dépendances python
-   - `sudo python3 app.py` : pour lancer finalement le webservice
+   - `sudo venv/bin/python app.py` : pour lancer finalement le webservice depuis votre venv
 
    > 🧙‍♂️`sudo` permet de lancer une commande en mode "super utilisateur"  ou "root" (= administrateur dans le monde windows). Les commandes de type `apt` sont toujours lancées en root.
 
@@ -96,13 +99,13 @@ Une dernière chose, le TP est probablement trop long pour être réalisé en un
 
 7. Maintenant, vous allez arrêter votre instance. Sur la page de l'instance, cliquez sur `État de l'instance` > `Arrêter l'instance`. Attendez quelques instants et rafraîchissez la page. Normalement, elle devrait afficher `Arrêté(e)` comme état et ne plus avoir d'adresse `DNS IPv4 Public`. Vérifiez que votre webservice n'est plus accessible.
 
-2. Redémarrez votre instance en cliquant sur `État de l'instance` > `Démarrer l'instance`. Vérifiez les adresses publiques de votre instance, elles devraient avoir changé ! Connectez-vous à votre instance comme précédemment, mais assurez-vous d'utiliser la nouvelle adresse. Une fois connecté à l'instance, exécutez `ls` (listing) pour vérifier que le dossier du webservice est toujours présent, puis `cd Ensai-CloudComputingLab1` pour vous placer dans le dossier. Comme l'instance a été arrêtée, vous devez relancer le webservice, mais comme toutes les dépendances ont été installées, il suffit de saisir `python3 app.py`. Accédez à votre webservice en utilisant la nouvelle adresse publique de votre machine.
+8. Redémarrez votre instance en cliquant sur `État de l'instance` > `Démarrer l'instance`. Vérifiez les adresses publiques de votre instance, elles devraient avoir changé ! Connectez-vous à votre instance comme précédemment, mais assurez-vous d'utiliser la nouvelle adresse. Une fois connecté à l'instance, exécutez `ls` (listing) pour vérifier que le dossier du webservice est toujours présent, puis `cd Ensai-CloudComputingLab1` pour vous placer dans le dossier. Comme l'instance a été arrêtée, vous devez relancer le webservice, mais comme toutes les dépendances ont été installées, il suffit de saisir `python3 app.py`. Accédez à votre webservice en utilisant la nouvelle adresse publique de votre machine.
 
-3. Maintenant, vous allez simplement redémarrer votre machine via l'option `Redémarrer l'instance`. Le redémarrage sera presque instantané, et il n'y aura aucun gros changement dans le tableau de bord. Cependant, vous devrez relancer votre webservice qui a été arrêté lors du processus.
+9. Maintenant, vous allez simplement redémarrer votre machine via l'option `Redémarrer l'instance`. Le redémarrage sera presque instantané, et il n'y aura aucun gros changement dans le tableau de bord. Cependant, vous devrez relancer votre webservice qui a été arrêté lors du processus.
 
    > 🧙‍♂️ Lorsque vous arrêtez votre machine, AWS libère les ressources associées. Lorsque vous la redémarrez, AWS peut déployer votre machine sur un autre serveur, d'où le changement d'adresse publique. En revanche, lorsqu'une machine est redémarrée, AWS effectue simplement un redémarrage, sans libérer les ressources. C'est pourquoi c'est plus rapide et que l'adresse publique reste la même.
 
-4. Votre machine ne sera plus utile, alors résiliez-la. La résiliation consiste à supprimer totalement une machine. C'est une action destructive qui peut entraîner une perte de données.
+10. Votre machine ne sera plus utile, alors résiliez-la. La résiliation consiste à supprimer totalement une machine. C'est une action destructive qui peut entraîner une perte de données.
 
 ## Ma première flotte d'instances ⛵⛵⛵
 
@@ -126,13 +129,15 @@ Le but de cette partie est de gérer une flotte d'instance via un *Auto Scaling 
    - **Détails avancés** : allez en bas de la page jusqu'à l'option `Données utilisateur`. Saisissez le texte suivant:
 
      ```bash
-     #!/bin/bash
-     apt update
-     apt install -y python3-pip
-     git clone https://github.com/HealerMikado/Ensai-CloudComputingLab1.git
-     cd Ensai-CloudComputingLab1
-     pip3 install -r requirements.txt
-     python3 app.py
+      #!/bin/bash
+      apt update
+      apt install -y python3-pip python3.12-venv
+      git clone https://github.com/HealerMikado/Ensai-CloudComputingLab1.git
+      cd Ensai-CloudComputingLab1
+      python3 -m venv venv
+      source venv/bin/activate
+      pip3 install -r requirements.txt
+      venv/bin/python app.py
      ```
      
      > Ce sont les mêmes commandes que vous avez fait précédemment, mais sans le sudo car par défaut le script de lancement est exécuté en super user.
