@@ -62,7 +62,7 @@ instance = Instance(
 
 Ensuite, via des paramètres nommés, vous allez définir un peu plus en détail votre instance. Rappelez-vous, pour une instance EC2, il vous faut définir son OS (appelé AMI chez AWS) et le type d'instance.
 
-Ajoutez à votre instance son AMI avec le paramètre `ami` qui prendra comme valeur `ami-0557a15b87f6559cf` (c'est l'identifiant de l'AMI Ubuntu dans la région `us-east-1`), et pour le type d'instance, vous prendrez une `t2.micro`. Exécutez votre architecture avec la commande `cdktf deploy` dans le terminal. Connectez-vous au tableau de bord EC2 et vérifiez que votre instance est bien démarrée. Néanmoins, si vous essayez de vous connecter en SSH à votre instance, vous allez voir que c'est impossible. En effet, lors de la définition de l'instance, nous n'avons pas défini la clé SSH à utiliser et le *security group* de l'instance. Tout cela fait que, pour le moment, l'instance n'est pas accessible.
+Ajoutez à votre instance son AMI avec le paramètre `ami` qui prendra comme valeur `ami-04b4f1a9cf54c11d0` (c'est l'identifiant de l'AMI Ubuntu dans la région `us-east-1`), et pour le type d'instance, vous prendrez une `t2.micro`. Exécutez votre architecture avec la commande `cdktf deploy` dans le terminal. Connectez-vous au tableau de bord EC2 et vérifiez que votre instance est bien démarrée. Néanmoins, si vous essayez de vous connecter en SSH à votre instance, vous allez voir que c'est impossible. En effet, lors de la définition de l'instance, nous n'avons pas défini la clé SSH à utiliser et le *security group* de l'instance. Tout cela fait que, pour le moment, l'instance n'est pas accessible.
 
 ### Configuration de la partie réseau
 
