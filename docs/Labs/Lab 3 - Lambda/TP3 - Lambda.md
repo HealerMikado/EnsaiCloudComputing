@@ -58,7 +58,11 @@ Votre fonction sera désormais appelée toutes les minutes. Malheureusement, com
 >    
 > 
 
-### 💨 Poussez les résultats dans une file SQS
+### ⚒️ Automatiser ce déploiement
+
+En vous aidant du code disponible ici https://github.com/HealerMikado/Ensai-CloudComputingLab3, créez un script terraform pour automatiser ce déploiement.
+
+### 💨Poussez les résultats dans une file SQS
 
 Maintenant, vous allez faire en sorte que votre fonction envoie ses résultats dans une file SQS. Cherchez le service SQS et créez une file. Elle sera du type Standard et donnez-lui le nom que vous souhaitez. Gardez toutes les valeurs par défaut et créez votre file. Copiez l'URL de la file.
 
