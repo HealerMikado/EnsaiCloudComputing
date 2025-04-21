@@ -97,7 +97,7 @@ def lambda_handler(event, context):
     {
       "messageId": "bc8007e9-6a6d-41d4-ba09-2fcf16e5e6c3",
       "receiptHandle": "AQEB92BoJQllWCtZSiiIQ69fXXX4ac7cpxxcbTirw4/b+ziBTzAxlwXFMbj3w6wbOPom4jPusM9453dZDXi4iVH/vf97fFk6yg/EkP9UZRYrK5OwfWiIxQJkklWe8ZKK84uYVhGIDi5kBfWTCnsX6u83+GE59g/UWc0+jbYvOArOLwCCOTRqbH3spkG/GhDHlyxVwPv/K+xNM+7pqQX21yjSQdiLwwlk7dDJwiNGatRq9D1vIDHduabmHn2I1sLrq778ZkZXS4YJ6IYeFXC+kWVYlSy+lXyVxHfxBVXQcU8PsSNv6MsoBDgjU1LD43NFikQLVI5F/+HnBEX2AzhoJPBMz/eijKW1miJNZ48G9gg2H2DOt0x2OQtg2M2VqtxROmD06gHUPsr67vvBH2J5m77Oxw==",
-      "body": "{\n\"number1\":1,\n\"number2\":5,\n\"operation\":\"+\"\n}",
+      "body": "{\n\"data\":1,\n\"number2\":5,\n\"operation\":\"+\"\n}",
       "attributes": {
         "ApproximateReceiveCount": "18",
         "SentTimestamp": "1681393246569",
@@ -115,4 +115,4 @@ def lambda_handler(event, context):
 
 ##########################################################
 # Code du message 
-{"number1":1,"number2":5,"operation":+}
+{"number1":1,"number2":5,"operation":"+"}

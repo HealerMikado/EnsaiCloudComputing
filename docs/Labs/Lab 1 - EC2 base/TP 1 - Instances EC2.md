@@ -54,7 +54,7 @@ Une dernière chose, le TP est probablement trop long pour être réalisé en un
 
 4. Une fois sur le tableau de bord de vos instances, cliquez sur l'ID de votre instance pour accéder à son tableau de bord, puis copiez son `Adresse IPv4 publique`.
 
-5. Vous allez maintenance vous connecter à votre instance.
+5. Vous allez maintenant vous connecter à votre instance.
 
    **Ubuntu** : ouvrez le terminal avec un `Ctrl+Alt+T`, puis
    ```
@@ -80,22 +80,22 @@ Une dernière chose, le TP est probablement trop long pour être réalisé en un
 
    Votre terminal devra se remplir de texte et terminer par un prompt commençant par `ubuntu@XXXXX`
 
-   🎉Félicitation vous venez de créer une machine virtuelle et de vous y connecter !
+   🎉Félicitation ! Vous venez de créer une machine virtuelle et de vous y connecter !
 
 6. Maintenant clonez le dépôt du TP avec la commande `git clone https://github.com/HealerMikado/Ensai-CloudComputingLab1.git` et installez tous les outils nécessaires pour faire fonctionner le webservice :
 
-   - `sudo apt update` : pour mettre à jouer les dépôts de paquets. Cela permet à votre machine de savoir ce qu'elle peut installer
+   - `sudo apt update` : pour mettre à jour les dépôts de paquets. Cela permet à votre machine de savoir ce qu'elle peut installer
    - `sudo apt install python3-pip`: pour installer pip. Python est déjà présent sur la machine mais pas pip
    - `sudo apt install python3.12-venv`: pour installer le module venv python
    - `cd Ensai-CloudComputingLab1` : pour vous placer dans le répertoire du webservice
    - `python3 -m venv venv` : pour créer un environnement virtuel
-   - `source venv/bin/activate` : pour activer l'environnement viruel
-   - `sudo pip3 install -r requirements.txt` : pour installer les dépendances python
+   - `source venv/bin/activate` : pour activer l'environnement virtuel
+   - `sudo pip3 install -r requirements.txt` : pour installer les dépendances Python
    - `sudo venv/bin/python app.py` : pour lancer finalement le webservice depuis votre venv
 
-   > 🧙‍♂️`sudo` permet de lancer une commande en mode "super utilisateur"  ou "root" (= administrateur dans le monde windows). Les commandes de type `apt` sont toujours lancées en root.
+   > 🧙‍♂️`sudo` permet de lancer une commande en mode "super utilisateur" ou "root" (= administrateur dans le monde Windows). Les commandes de type `apt` sont toujours lancées en root.
 
-   Ouvrez un navigateur web ou Insomnia sur votre ordinateur et faite une requête à la page `http://[adresseIPv4]/task` en remplaçant `[adresseIPv4]` par l'adresse IPv4 de votre instance. Vous devrez arriver sur une page contenant 3 éléments.
+   Ouvrez un navigateur web ou Insomnia sur votre ordinateur et faites une requête à la page `http://[adresseIPv4]/task` en remplaçant `[adresseIPv4]` par l'adresse IPv4 de votre instance. Vous devrez arriver sur une page contenant 3 éléments.
 
 7. Maintenant, vous allez arrêter votre instance. Sur la page de l'instance, cliquez sur `État de l'instance` > `Arrêter l'instance`. Attendez quelques instants et rafraîchissez la page. Normalement, elle devrait afficher `Arrêté(e)` comme état et ne plus avoir d'adresse `DNS IPv4 Public`. Vérifiez que votre webservice n'est plus accessible.
 
@@ -109,7 +109,7 @@ Une dernière chose, le TP est probablement trop long pour être réalisé en un
 
 ## Ma première flotte d'instances ⛵⛵⛵
 
-Le but de cette partie est de gérer une flotte d'instance via un *Auto Scaling Group* et de rendre accessible cette flotte via un point d'entrée unique qui s'appelle un *Load Balancer*. Le *Load Balancer* va répartir la charge entre les différentes machines pour éviter de surcharger une machine en particulier. Voici architecture que vous allez construire : 
+Le but de cette partie est de gérer une flotte d'instances via un *Auto Scaling Group* et de rendre accessible cette flotte via un point d'entrée unique qui s'appelle un *Load Balancer*. Le *Load Balancer* va répartir la charge entre les différentes machines pour éviter de surcharger une machine en particulier. Voici l'architecture que vous allez construire : 
 
 <img src="img/ELB+ASG.jpg" style="zoom:67%;" />
 
@@ -119,13 +119,9 @@ Le but de cette partie est de gérer une flotte d'instance via un *Auto Scaling 
    - **Nom du modèle** : modele-webservice
    - **Images d'applications et de systèmes d'exploitation (Amazon Machine Image)** : cliquez sur Démarrage rapide, puis sélectionnez Ubuntu.
    - **Type d'instance** : prenez une t2.micro pour cet exercice.
-
    - **Paire de clés (connexion)** : sélectionnez la clé `vockey`.
-
    - **Paramètres réseau** : laissez le paramètre du sous-réseau par défaut. Cela signifie que ce modèle ne fixe pas le sous-réseau à utiliser. Pour le pare-feu, sélectionnez `launch-wizard-1`, qui correspond à celui qui a été créé lors de la première partie du TP.
-
-   - **Stockage (volumes)** : laissez le paramètre par défaut. Votre machine aura un volume EBS (~un disque dur) de 8Go.
-
+   - **Stockage (volumes)** : laissez le paramètre par défaut. Votre machine aura un volume EBS (~un disque dur) de 8 Go.
    - **Détails avancés** : allez en bas de la page jusqu'à l'option `Données utilisateur`. Saisissez le texte suivant:
 
      ```bash
@@ -140,7 +136,7 @@ Le but de cette partie est de gérer une flotte d'instance via un *Auto Scaling 
       venv/bin/python app.py
      ```
      
-     > Ce sont les mêmes commandes que vous avez fait précédemment, mais sans le sudo car par défaut le script de lancement est exécuté en super user.
+     > Ce sont les mêmes commandes que vous avez fait précédemment, mais sans le sudo car par défaut le script de lancement est exécuté en *super user*.
 
    Validez la création de votre modèle. 
 
@@ -160,7 +156,7 @@ Le but de cette partie est de gérer une flotte d'instance via un *Auto Scaling 
       - Capacité minimale : 2
       - Capacité maximale : 4
 
-      Cliquez sur l'option `Politique de suivi des objectifs et d'échelonnement` et laissez la valeur par défaut. Nous venons de configurer un groupe d'instances qui va commencer avec 2 instances et pourra avoir entre 2 et 4 instances. Si AWS détecte que l'utilisation globale du CPU dépasse 50 %, AWS va créer une nouvelle instance. Cliquez sur `Passer à la vérification`.
+      Cliquez sur l'option `Politique de suivi des objectifs et d'échelonnement` et laissez la valeur par défaut. Nous venons de configurer un groupe d'instances qui va commencer avec 2 instances et pourra avoir entre 2 et 4 instances. Si AWS détecte que l'utilisation globale du CPU dépasse 50 %, une nouvelle instance sera automatiquement lancée.. Cliquez sur `Passer à la vérification`.
 
    5. Descendez au bas de la page et cliquez sur `Créer un groupe Auto Scaling`.
 
@@ -170,4 +166,4 @@ Le but de cette partie est de gérer une flotte d'instance via un *Auto Scaling 
 
 4. Connectez-vous à une instance et exécutez la commande suivante : `while : ; do : ; done`. Cette commande bloque votre instance et lance une boucle infinie composée de l'instruction null `:`, ce qui sature le CPU de la machine. Attendez quelques minutes et de nouvelles instances vont être lancées automatiquement pour maintenir l'utilisation globale du CPU à 50 %. Vous pouvez arrêter la commande avec `Ctrl+C` et après une dizaine de minutes, le nombre d'instances diminuera. Comme la réduction de votre flotte prend plus de temps, vous aurez du mal à voir cela en TP.
 
-Félicitations, vous venez en quelques clics de déployer une architecture simple et efficace qui s'adapte à la charge et qui est hautement disponible car répartie sur deux datacenters. L'architecture que vous venez de créer est dite **hautement disponible** et **élastique**. En d'autres termes, elle est capable de s'adapter à la charge en augmentant ou en diminuant le nombre de machines (élasticité), mais aussi elle continuera à fonctionner en cas de panne massive (haute disponibilité). Il manque encore une base de données à notre application pour le moment pour qu'elle soit réellement intéressante. Nous verrons plus tard dans le cours comment associer un code python à une base de données hébergée sur AWS.
+Félicitations, en quelques clics, vous venez de déployer une architecture simple et efficace qui s'adapte à la charge et qui est hautement disponible car répartie sur deux datacenters. L'architecture que vous venez de créer est dite **hautement disponible** et **élastique**. En d'autres termes, elle est capable de s'adapter à la charge en augmentant ou en diminuant le nombre de machines (élasticité), mais aussi elle continuera à fonctionner en cas de panne massive (haute disponibilité). Il manque encore une base de données à notre application pour le moment pour qu'elle soit réellement intéressante. Nous verrons plus tard dans le cours comment associer un code Python à une base de données hébergée sur AWS.

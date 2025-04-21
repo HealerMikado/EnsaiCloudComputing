@@ -46,7 +46,7 @@
                     <ul>
                         <li>Régions : emplacement "physique" dans le monde qui regroupe des zones de disponibilité (<em>Availability Zone</em>, AZ)</li>
                         <li>Zones de disponibilité : data centers logiques, les ressources de différentes AZ sont isolées les unes des autres</li>
-                        <li>Zones locales : data centers spécifiques pour rapprocher calcul du client</li>
+                        <li>Zones locales : data centers spécifiques pour rapprocher le calcul du client</li>
                         <li>Emplacements périphériques : points de présence pour services spécifiques (cache)</li>
                     </ul>
                 </section>
@@ -56,10 +56,10 @@
                     <ul>
                         <li>Si une région tombe cela n'impacte pas les autres</li>
                         <li>Si une AZ tombe, cela n'impacte pas les autres AZ</li>
-                        <li>Les régions sont indépendantes : pas les mêmes services, peu de services permettent le cross region.</li>
+                        <li>Les régions sont indépendantes : pas les mêmes services, peu de services permettent le <em>cross region</em>.</li>
                         <li>Tous les AZ d'une même région ont les mêmes services</li>
                     </ul>
-                    <div class="important-bloc fragment">Déployer une application sur plusieurs AZs/régions permet de limiter les indispos dues au Cloud Provider</div>
+                    <div class="important-bloc fragment">Déployer une application sur plusieurs AZs/régions permet de limiter les indisponibilités dues au Cloud Provider</div>
                 </section>
 
                 <section>
@@ -83,16 +83,16 @@
                         <div class="col">
                             <p>Machine unique</p>
                             <ul>
-                                <li> <span class="red">Désavantages</span>
+                                <li> <span class="red">❌ Désavantages</span>
                                     <ul>
                                         <li>Facturation élevée</li>
                                         <li>Reprise sur erreur lente</li>
                                     </ul>
                                 </li>
-                                <li> <span class="green">Avantages</span>
+                                <li> <span class="green">✅ Avantages</span>
                                     <ul>
                                         <li>Simple à mettre en place</li>
-                                        <li>Application stateful</li>
+                                        <li>Application <em>stateful</em></li>
                                     </ul>
                                 </li>
                                 </li>
@@ -101,17 +101,17 @@
                         <div class="col">
                             <p>Flotte de machines</p>
                             <ul>
-                                <li> <span class="red">Désavantages</span>
+                                <li> <span class="red">❌ Désavantages</span>
                                     <ul>
                                         <li>Ajoute de la complexité</li>
-                                        <li>Monitorer une flotte de machine</li>
-                                        <li>Application stateless</li>
+                                        <li>Surveiller une flotte de machine</li>
+                                        <li>Application <em>stateless</em></li>
                                     </ul>
                                 </li>
-                                <li> <span class="green">Avantages</span>
+                                <li> <span class="green">✅ Avantages</span>
                                     <ul>
                                         <li>Permet de faire des économies</li>
-                                        <li>Permet haute disponibilité</li>
+                                        <li>Permet d'assurer haute disponibilité</li>
                                     </ul>
                                 </li>
                                 </li>
@@ -132,12 +132,12 @@
                         <li><span class="important">Auto-Scaling Group :</span> gère une
                             flotte d'EC2. Peut en lancer/éteindre en fonction de
                             conditions (heures, utilisation CPU, RAM), ou si une machine
-                            est considérée comme ko</li>
+                            est considérée hors service</li>
                         <li><span class="important">Load Balancer :</span> composant qui
-                            répartit le traffic entre plusieurs machines. Permet un point
+                            répartit le trafic entre plusieurs machines. Permet un point
                             d'entrée unique pour accéder à une flotte. Équilibre le
-                            traffic, et peut renvoyer un utilisateur vers la même machine
-                            (sticky session) </li>
+                            trafic, et peut renvoyer un utilisateur vers la même machine
+                            (<em>sticky session</em>) </li>
                     </ul>
                 </section>
 
@@ -146,7 +146,7 @@
                     <ul>
                         <li>Haute disponibilité</li>
                         <li>Élasticité horizontale</li>
-                        <li>Appli sur plusieurs AZs</li>
+                        <li>Application sur plusieurs AZs</li>
                         <li>Permet de faire des économies</li>
                         <li>Nécessite d'être pris en compte dans le code</li>
                         <li>Pour la partie traitement, pas stockage</li>
@@ -182,7 +182,7 @@
                         être versionné et redéployé à l'infini.</div>
 
                     <ul class="fragment">
-                        <li>Terraform (cross plateforme)</li>
+                        <li>Terraform/Open Tofu (<em>cross plateforme</em>)</li>
                         <li>Amazon Cloud Formation, Amazon Serverless Application Manager
                         </li>
                         <li>Azure Resource Manager</li>
@@ -193,7 +193,7 @@
                 <section>
                     <h3>Terraform</h3>
                     <ul>
-                        <li>Projet propriétaire crée par HashiCorp, Open Tofu fork open source</li>
+                        <li>Projet propriétaire crée par HashiCorp (acheté par IBM en 2025), Open Tofu fork open source</li>
                         <li>Langage de configuration (HCL)/CDK pour code</li>
                         <li>Terraform provider pour traduction</li>
                         <li>Utilise les API des différents systèmes</li>
@@ -205,7 +205,7 @@
                 <section>
                     <h3>Configuration language vs CDKTF</h3>
                     <ul>
-                        <li>HashiCorp Configuration Language (HCL) : pas json ni yaml
+                        <li>HashiCorp Configuration Language (HCL) : pas JSON ni YAML
                             (existe une version json)</li>
                         <li>CDKTF : bibliothèques pour coder son architecture dans son
                             langage de prédilection</li>
@@ -286,7 +286,7 @@ app.synth()
                     <h3>In a nutshell 🥜</h3>
                     <ul>
                         <li>Une classe qui hérite de TerraformStack</li>
-                        <li>Toutes l'infra dans le init (ou du moins accessible depuis le
+                        <li>Toute l'infra dans le init (ou du moins accessible depuis le
                             init)</li>
                         <li>Objets qui représentent les services, premier param self, second
                             un nom métier</li>
@@ -294,13 +294,13 @@ app.synth()
                         </li>
                     </ul>
                     <div class="important-bloc fragment">Allez voir la doc des classes
-                        avec un ctrl+clic</div>
+                        avec un Ctrl+clic</div>
                 </section>
 
                 <section>
                     <h3>Exemple</h3>
                     <pre><code class="python" data-trim data-noescape>
-class HightAvailabilityStack(TerraformStack):
+class HighAvailabilityStack(TerraformStack):
     def __init__(self, scope: Construct, id: str):
         super().__init__(scope, id)
 
@@ -320,7 +320,7 @@ class HightAvailabilityStack(TerraformStack):
 
 
 app = App()
-MyStack(app, "HightAvailabilityApp")
+MyStack(app, "HighAvailabilityApp")
 app.synth()                    
                     </code></pre>
                 </section>
@@ -330,7 +330,7 @@ app.synth()
                     <p>Ce que vous allez faire</p>
                     <ol>
                         <li>Terminer le TP 1 si ce n'est pas fait</li>
-                        <li>Refaire le TP 1 en utilisant le CDK TerraForm</li>
+                        <li>Refaire le TP 1 en utilisant le CDK Terraform</li>
                     </ol>
                 </section>
 

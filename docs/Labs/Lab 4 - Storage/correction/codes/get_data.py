@@ -14,61 +14,61 @@ response = table.scan(
 
 print(json.dumps(response, indent=2))
 
-# SELECT * FROM battle-royal WHERE PK='johnsonscott'
-# SELECT * FROM battle-royal WHERE PK=%(name)s, name = johnsonscott
+# # SELECT * FROM battle-royal WHERE PK='johnsonscott'
+# # SELECT * FROM battle-royal WHERE PK=%(name)s, name = johnsonscott
 
 user="johnsonscott"
-resp = table.query(
-    Select='ALL_ATTRIBUTES',
-    KeyConditionExpression="PK = :pk",
-    ExpressionAttributeValues={
-        ":pk": f"USER#{user}",
-    },
-)
+# resp = table.query(
+#     Select='ALL_ATTRIBUTES',
+#     KeyConditionExpression="PK = :pk",
+#     ExpressionAttributeValues={
+#         ":pk": f"USER#{user}",
+#     },
+# )
 
-print(json.dumps(resp, indent=2))
-
-
-response = table.get_item(
-    Key={
-        'PK': f"USER#{user}",
-        'SK' : f"#METADATA#{user}"
-    }
-)
-
-print(json.dumps(resp, indent=2))
-
-game="292c8712-c9df-4721-a9a2-cae4ac607ed6"
-resp = table.query(
-    Select='ALL_ATTRIBUTES',
-    KeyConditionExpression="PK = :pk AND SK = :sk",
-    ExpressionAttributeValues={
-        ":pk": f"GAME#{game}",
-        ":sk": f"#METADATA#{game}"
-    },
-)
-print(resp)
+# print(json.dumps(resp, indent=2))
 
 
-response = table.get_item(
-    Key={
-        'PK': f"GAME#{game}",
-        'SK' : f"#METADATA#{game}"
-    }
-)
+# response = table.get_item(
+#     Key={
+#         'PK': f"USER#{user}",
+#         'SK' : f"#METADATA#{user}"
+#     }
+# )
 
-print(resp)
+# print(json.dumps(resp, indent=2))
 
-#begins_with(col, val)
-resp = table.query(
-    Select='ALL_ATTRIBUTES',
-    KeyConditionExpression="PK = :pk AND begins_with(SK, :sk)",
-    ExpressionAttributeValues={
-        ":pk": f"GAME#{game}",
-        ":sk": f"USER#"
-    },
-)
-print(json.dumps(resp, indent=2))
+# game="292c8712-c9df-4721-a9a2-cae4ac607ed6"
+# resp = table.query(
+#     Select='ALL_ATTRIBUTES',
+#     KeyConditionExpression="PK = :pk AND SK = :sk",
+#     ExpressionAttributeValues={
+#         ":pk": f"GAME#{game}",
+#         ":sk": f"#METADATA#{game}"
+#     },
+# )
+# print(resp)
+
+
+# response = table.get_item(
+#     Key={
+#         'PK': f"GAME#{game}",
+#         'SK' : f"#METADATA#{game}"
+#     }
+# )
+
+# print(resp)
+
+# #begins_with(col, val)
+# resp = table.query(
+#     Select='ALL_ATTRIBUTES',
+#     KeyConditionExpression="PK = :pk AND begins_with(SK, :sk)",
+#     ExpressionAttributeValues={
+#         ":pk": f"GAME#{game}",
+#         ":sk": f"USER#"
+#     },
+# )
+# print(json.dumps(resp, indent=2))
 
 
 resp = table.query(
@@ -77,21 +77,32 @@ resp = table.query(
     KeyConditionExpression="SK = :sk AND begins_with(PK, :pk)",
     ExpressionAttributeValues={
         ":pk": f"GAME#",
-        ":sk": f"USER#{user}"
+        ":sk": f"USER#{user}",
+    },
+)
+print(json.dumps(resp, indent=2))
+
+resp = table.query(
+    Select='ALL_ATTRIBUTES',
+    IndexName='InvertedIndex',
+    KeyConditionExpression="SK = :sk",
+    ExpressionAttributeValues={
+        ":sk": f"USER#{user}",
     },
 )
 print(json.dumps(resp, indent=2))
 
 
-resp = table.query(
-    Select='ALL_ATTRIBUTES',
-    IndexName='SecondaryIndex',
-    KeyConditionExpression="#m = :map",
-    ExpressionAttributeNames={
-        '#m': 'map'
-    },
-    ExpressionAttributeValues={
-        ":map": "Green Grasslands",
-    },
-)
-print(resp)
+
+# resp = table.query(
+#     Select='ALL_ATTRIBUTES',
+#     IndexName='Secondary',
+#     KeyConditionExpression="#m = :map",
+#     ExpressionAttributeNames={
+#         '#m': 'map'
+#     },
+#     ExpressionAttributeValues={
+#         ":map": "Green Grasslands",
+#     },
+# )
+# print(resp)

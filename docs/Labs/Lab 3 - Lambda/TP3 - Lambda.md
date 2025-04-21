@@ -9,13 +9,13 @@ parent: Labs
 
 ## 🧱 Mise en place
 
-Allez sur la plateforme AWS Academy et accédez au cours AWS Academy Learner Lab [43226]. Puis cliquez sur `Modules` > `Learner Lab`. Lancez votre environnement en cliquant sur `Start Lab`. Une fois le cercle passé au vert, cliquez sur `AWS Details` et `AWS CLI`. Les clefs que vous voyez vont permettre un accès programmatique à votre compte. Cherchez le dossier `.aws` sur votre machine puis remplacez le contenu du fichier `credentials` par les clefs que vous venez de récupérer.
+Allez sur la plateforme AWS Academy et accédez au cours AWS Academy Learner Lab [43226]. Puis cliquez sur `Modules` > `Learner Lab`. Lancez votre environnement en cliquant sur `Start Lab`. Une fois le cercle passé au vert, cliquez sur `AWS Details` et `AWS CLI`. Les clés que vous voyez vont permettre un accès programmatique à votre compte. Cherchez le dossier `.aws` sur votre machine puis remplacez le contenu du fichier `credentials` par les clefs que vous venez de récupérer.
 
 ## Ma première Lambda
 
 ### 📄 Définition de la Lambda
 
-Une fois sur la console AWS, cherchez le service `Lambda` dans la barre de recherche. Sur le tableau de bord Lambda, cliquez sur `Créer une fonction`. Laissez l'option `Créer à partir de zéro` cochée, donnez un nom à votre fonction Lambda, et pour le langage d'exécution sélectionnez `python3.9`. Conservez l'architecture x86_64, et dépliez `Modifier le rôle d'exécution par défaut`, sélectionnez `Utiliser un rôle existant` et sélectionnez le rôle `LabRole`. Créez votre fonction.
+Une fois sur la console AWS, cherchez le service `Lambda` dans la barre de recherche. Sur le tableau de bord Lambda, cliquez sur `Créer une fonction`. Laissez l'option `Créer à partir de zéro` cochée, donnez un nom à votre fonction Lambda, et, pour le langage d'exécution sélectionnez `Python3.12`. Conservez l'architecture x86_64, et dépliez `Modifier le rôle d'exécution par défaut`, sélectionnez `Utiliser un rôle existant` et sélectionnez le rôle `LabRole`. Créez votre fonction.
 
 > 🧙‍♂️ À la différence des instances EC2, une fonction Lambda a besoin d'un rôle pour fonctionner. Sans entrer dans les détails, un rôle va déterminer les droits de la fonction. Comme votre compte n'a pas le droit de création de rôle, vous ne pouvez pas créer un rôle à la volée, et il faut sélectionner le rôle `LabRole` déjà créé.
 
@@ -43,13 +43,13 @@ Votre fonction sera désormais appelée toutes les minutes. Malheureusement, com
 
 > 🧙‍♂️ Il est possible d'ajouter un logger (utile pour le debug) en faisant des `print()` (ce n'est pas idéal), ou en utilisant le module `logging`.
 >
-> ```python
+> ```Python
 >import os
 > import logging
 > logger = logging.getLogger()
 > logger.setLevel(logging.INFO)
 > 
-> def lambda_handler(event, context):
+> def Lambda_handler(event, context):
 >  logger.info('## ENVIRONMENT VARIABLES')
 >  logger.info(os.environ)
 >     logger.info('## EVENT')
@@ -62,20 +62,20 @@ Votre fonction sera désormais appelée toutes les minutes. Malheureusement, com
 
 En vous aidant du code disponible ici https://github.com/HealerMikado/Ensai-CloudComputingLab3, créez un script terraform pour automatiser ce déploiement.
 
-### 💨Poussez les résultats dans une file SQS
+### 💨Pousser les résultats dans une file SQS
 
-Maintenant, vous allez faire en sorte que votre fonction envoie ses résultats dans une file SQS. Cherchez le service SQS et créez une file. Elle sera du type Standard et donnez-lui le nom que vous souhaitez. Gardez toutes les valeurs par défaut et créez votre file. Copiez l'URL de la file.
+Maintenant, vous allez faire en sorte que votre fonction envoie ses résultats dans une file SQS. Cherchez le service SQS et créez une file. Choisissez le type Standard et donnez-lui le nom de votre choix. Gardez toutes les valeurs par défaut et créez votre file. Copiez l'URL de la file.
 
 Retournez sur la page de votre Lambda et modifiez le code pour publier dans la file SQS en vous aidant du code suivant :
 
-```python
+```Python
 import json
 import boto3
 from datetime import datetime
 sqs = boto3.client('sqs')  #client is required to interact with sqs
 
-def lambda_handler(event, context):
-    # event provenant d'une lambda
+def Lambda_handler(event, context):
+    # event provenant d'une Lambda
     data = int(json.loads(event["Records"][0]["body"])["data"])
 
     sqs.send_message(
@@ -90,16 +90,13 @@ def lambda_handler(event, context):
 
 Déployez la nouvelle fonction, puis attendez quelques minutes. Ensuite, retournez sur la page de votre file SQS et cliquez sur `Envoyer et recevoir des messages`, puis sur `Rechercher des messages`. Vous devriez voir des messages apparaître. Cliquez sur l'un d'eux et vous devriez voir votre message.
 
-🎉 Félicitations ! Vous venez de mettre en place une architecture 100% serverless qui va réaliser un traitement toutes les minutes et pousser le résultat dans une file pour être utilisé par un autre service par la suite. Même si le code Python du traitement est assez simple, l'architecture elle ne l'est pas. Vous pourriez par exemple, avec ce système, faire une requête toutes les heures à un web service pour mettre à jour des données en base.
+🎉 Félicitations ! Vous venez de mettre en place une architecture 100% serverless qui va réaliser un traitement toutes les minutes et pousser le résultat dans une file pour être utilisé par un autre service par la suite. Même si le code Python du traitement est assez simple, l'architecture, elle, ne l'est pas. Vous pourriez par exemple, avec ce système, faire une requête toutes les heures à un webservice pour mettre à jour des données en base.
 
 ## 🧮Une calculatrice
 
-Maintenant vous allez réaliser une calculatrice en utilisant une fonction lambda. Voici le schema d'architecture globale. 
+Maintenant vous allez réaliser une calculatrice en utilisant une fonction Lambda. Voici le schéma d'architecture globale. 
 
 <img src="img/exercice2.jpg" style="zoom: 60%;" />
-
-
-
 
 
 Vous allez devoir créer :
@@ -107,13 +104,13 @@ Vous allez devoir créer :
 - Deux files SQS, une pour l'input et une pour l'output.
 - Une fonction Lambda qui va aller chercher les clés `number1`, `number2` et `operation` et faire le calcul demandé. Les opérations que l'on souhaite faire sont l'addition, la soustraction, la multiplication et la division.
 
-Le déclencheur de la fonction lambda passe des paramètres dans le dictionnaire `event`. Pour obtenir la clé `number1`, vous devez faire `float(json.loads(event["Records"][0]["body"])["number1"])`.
+Le déclencheur de la fonction Lambda passe des paramètres dans le dictionnaire `event`. Pour obtenir la clé `number1`, vous devez faire `float(json.loads(event["Records"][0]["body"])["number1"])`.
 
-> 🧙‍♂️ Pour vous aider à comprendre ce code, les messages récupérés par la lambda sont dans la clé `Records`. SQS n'envoie pas les messages à la fonction lambda, c'est la fonction qui les pull. Sauf qu'elle peut en récupérer plusieurs à la fois, et la clé `Records` est une liste. Pour simplifier, on ne regarde que le premier message, d'où le `event["Records"][0]`. Si vous avez envie, vous pouvez boucler sur les éléments de la liste. Ensuite, chaque message est contenu dans la clé `body`. Les messages sont considérés comme des strings car il n'y a aucune raison que ce soit un JSON, donc il nous faut le transformer en dictionnaire avec un `json.loads()`. Enfin, il est possible de récupérer les clés que l'on souhaite. Attention à leur type ! Il faut spécifier que les nombres sont bien des nombres.
+> 🧙‍♂️ Pour vous aider à comprendre ce code, les messages récupérés par la Lambda sont dans la clé `Records`. SQS n'envoie pas les messages à la fonction Lambda, c'est la fonction qui les pull. Sauf qu'elle peut en récupérer plusieurs à la fois, et la clé `Records` est une liste. Pour simplifier, on ne regarde que le premier message, d'où le `event["Records"][0]`. Si vous avez envie, vous pouvez boucler sur les éléments de la liste. Ensuite, chaque message est contenu dans la clé `body`. Les messages sont considérés comme des strings car il n'y a aucune raison que ce soit un JSON, donc il nous faut le transformer en dictionnaire avec un `json.loads()`. Enfin, il est possible de récupérer les clés que l'on souhaite. Attention à leur type ! Il faut spécifier que les nombres sont bien des nombres.
 
 Pour tester votre application, vous pouvez :
 
-- Faire un test via l'onglet test de la fonction lambda avec le JSON suivant :
+- Faire un test via l'onglet test de la fonction Lambda avec le JSON suivant :
 
 ```
 {
@@ -158,9 +155,9 @@ Pour tester votre application, vous pouvez :
 - Créez un message dans la queue d'input et voyez si le résultat apparaît dans la queue d'output. Voici un exemple de message :
 
   ```
-  {"number1":1,"number2":5,"operation":+}
+  {"number1":1,"number2":5,"operation":"+"}
   ```
 
-🎉 Félicitations, vous venez de mettre en place une architecture 100% serverless avec trois services qui communiquent entre eux. Mettre des files entre des services permet de découpler les services et d'avoir un système plus modulable. Par exemple, dans notre cas, notre lambda ne sait pas d'où proviennent les données, elle sait juste les prendre depuis une file. Ainsi, la source des données peut changer, du moment que la nouvelle source alimente la file SQS, il n'y aura pas de raison de changer la lambda. De la même manière, notre lambda ne se préoccupe pas du service qui va utiliser les données qu'elle produit. Elle les dépose simplement dans une file pour qu'un consommateur puisse les récupérer. Les files SQS agissent comme des zones tampons entre les services.
+🎉 Félicitations, vous venez de mettre en place une architecture 100% serverless avec trois services qui communiquent entre eux. Mettre des files entre des services permet de découpler les services et d'avoir un système plus modulable. Par exemple, dans notre cas, notre Lambda ne sait pas d'où proviennent les données, elle sait juste les prendre depuis une file. Ainsi, la source des données peut changer, du moment que la nouvelle source alimente la file SQS, il n'y aura pas de raison de changer la Lambda. De la même manière, notre Lambda ne se préoccupe pas du service qui va utiliser les données qu'elle produit. Elle les dépose simplement dans une file pour qu'un consommateur puisse les récupérer. Les files SQS agissent comme des zones tampons entre les services.
 
 S'il vous reste du temps pendant le TP, commencez le TP noté.

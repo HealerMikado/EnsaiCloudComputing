@@ -4,63 +4,63 @@ title: "TP noté2 - Faire une API REST 100% serverless 🧰"
 nav_exclude: true
 ---
 
-# Devoir noté 2 : un web service serverless
+# Devoir noté 2 : Postagram
 
-Ce sujet peut paraître imposant et impossible à terminer mais ce n'est pas le cas. Il ne contient que peu de code à écrire (max 100 lignes de python, et une infrastructure déjà vue). Résultat avancez pas à pas, il n'est pas demandé de le rendre à la fin du TP. Le rendu final est attendu pour le 19 mai.
+Ce sujet peut paraître imposant et impossible à terminer mais ce n'est pas le cas. Il ne contient que peu de code à écrire (maximum 100 lignes de python, et une infrastructure déjà vue). Résultat, avancez pas à pas, il n'est pas demandé de le rendre à la fin du TP. Le rendu final est attendu pour le 14 mai.
 
 ## 📃Sujet
 
-Dans ce devoir noté vous allez concevoir la partie backend du nouveau réseau social de partage de photo, **Postagram**. Voici le diagramme d'architecture de l'application.
+Dans ce devoir noté vous allez concevoir la partie backend du nouveau réseau social de partage de photos, **Postagram**. Voici le diagramme d'architecture de l'application.
 
 <img src="img/architecture cible TP noté.png" style="zoom: 50%;" />
 
-Le service sera hébergé par une flotte d'instance **EC2** (1 par défaut, 4 en cas de grosse charge) géré par un **Auto Scaling Group** derrière un Load Balancer. Il sera écrit en python en utilisant la librairie FastApi et devra répondre à plusieurs endpoints :
+Le service sera hébergé par une flotte d'instances **EC2** (1 par défaut, 4 en cas de forte charge) gérée par un **Auto Scaling Group** derrière un Load Balancer. Il sera écrit en python en utilisant la librairie FastApi et devra répondre à plusieurs endpoints :
 
-- `POST /posts` pour créer une publication
-- `DELETE /posts/{id}` pour supprimer une publication
-- `GET /posts` pour lire toutes les publications stockées en base
-- `GET /posts?user=username` pour lire toutes les publications d'un utilisateur
-- `GET /getSignedUrlPut` qui va retourner une url signée pour pouvoir uploader une image (déjà fourni)
+- `POST /posts` pour créer une publication ;
+- `DELETE /posts/{id}` pour supprimer une publication ;
+- `GET /posts` pour lire toutes les publications stockées en base ;
+- `GET /posts?user=username` pour lire toutes les publications d'un utilisateur ;
+- `GET /getSignedUrlPut` qui retourne une url signée pour pouvoir uploader une image (déjà fourni).
 
 Vous utiliserez en plus :
 
-- Un **bucket S3** pour stocker des images
-- Une base **DynamoDB** pour stocker les post
-- Une **fonction lambda** qui se déclenchera à chaque dépôt de fichier dans le bucket S3 et appellera le service **Amazon Rekognition** pour détecter les labels et les stocker dans la base DynamoDB
+- Un **bucket S3** pour stocker les images ;
+- Une base **DynamoDB** pour stocker les postes ;
+- Une **fonction lambda** qui se déclenchera à chaque dépôt de fichier dans le bucket S3 et appellera le service **Amazon Rekognition** pour détecter les labels et les stocker dans la base DynamoDB.
 
-## 📦Attendu 
+## 📦 Attendu 
 
-Votre but n'est pas de réaliser l'intégralité de l'application, mais seulement la partie création d'une publication et détection des labels via le service **Amazon Rekognition**, récupération des publications et suppression des publications. Le reste vous sera déjà donnée. Ainsi vous avez à votre disposition:
+Votre but n'est pas de réaliser l'intégralité de l'application, mais seulement la partie création d'une publication et détection des labels via le service **Amazon Rekognition**, récupération des publications et suppression des publications. Le reste vous est déjà donné. Ainsi vous avez à votre disposition:
 
-- Un application web écrite en Reactjs (le dossier webapp) qui va communiquer avec votre application. Aucune connaissance en Reactjs n'est attendue, ce code est uniquement là pour requêter votre webservice. Vous avez néanmoins à modifier la ligne 12 du fichier index.js pour mettre à la place l'adresse de votre Load Balancer quand vous testerez votre code votre code sur AWS. Attention l'url ne doit pas avoir de / à la fin !! Pour lancer cette application placez vous dans le dossier webapp et faite **npm install** la première fois puis un npm start ensuite. 
-- Une base de webservice avec tous les endpoints de définis. Vous allez devoir définir les fonctions vides. Ce web service contient la fonction qui permet de générer une URL présignée pour S3. Ne la touchez pas ! Pour lancer le webservice faite un `python3 app.py`. Le webservice se lance sur le port 8080.
+- Une application web écrite en Reactjs (le dossier webapp) qui va communiquer avec votre application. Aucune connaissance en Reactjs n'est attendue, ce code est uniquement là pour requêter votre webservice. Vous avez néanmoins à modifier la ligne 12 du fichier index.js pour mettre à la place l'adresse de votre Load Balancer quand vous testerez votre code sur AWS. Attention l'url ne doit pas avoir de / à la fin !! Pour lancer cette application placez vous dans le dossier webapp et faites **npm install** la première fois puis un npm start ensuite. 
+- Une base de webservice avec tous les endpoints de définis. Vous allez devoir définir les fonctions vides. Ce web service contient la fonction qui permet de générer une URL présignée pour S3. Ne la touchez pas ! Pour lancer le webservice faites un `python3 app.py`. Le webservice se lance sur le port 8080.
 - Une base de projet Terraform à compléter
 
 Le code est à récupérer avec un `git clone https://github.com/HealerMikado/postagram_ensai.git`
 
-Cet exercice est à faire par groupe de 3 max. Vous pouvez ainsi le faire seul à deux ou à trois. Vous noterez les membres du groupe dans un fichier `groupe.md` et ce même si vous êtes seul ! Vous rendrez une Moodle une archive .zip contenant tout le code du projet (sciprts terraform et le code webservice). A la différence de l’exercice précédent, votre code ne peux pas fonctionner tel quel. Il n'est pas possible d'injecter dans les instances EC2 le nom du bucket et de la table dynamoDB que vous aller créer. Vous aller ainsi devoir réaliser 2 scripts terraform :
+Cet exercice est à faire par groupe de 3 max. Vous pouvez ainsi le faire seul à deux ou à trois. Vous noterez les membres du groupe dans un fichier `groupe.md` même si vous êtes seul ! Vous rendrez une Moodle une archive .zip contenant tout le code du projet (scripts terraform et le code du webservice). A la différence de l’exercice précédent, votre code ne peut pas fonctionner tel quel. Il n'est pas possible d'injecter dans les instances EC2 le nom du bucket et de la table dynamoDB directement. Vous allez ainsi devoir réaliser 2 scripts terraform :
 
 - Le premier avec l'architecture *serverless* : bucket S3, lambda et DynamoDB qui devra avoir 2 terraform output avec le bucket S3 généré et la table dynamoDB
-- Le second avec l'architecture avec serveur : EC2, auto scalling group et load balancer. Vous mettrez à jours les variables `bucket` et `dynamo_table` avec les variables qui proviendront du premier script. Ces variables seront injectées comme variable d'environnement dans les instances EC2 pour être accessible avec `os.getenv()`. Pendant la phase de développement sur votre machine, mettez à jour le fichier `.env`
+- Le second avec l'architecture avec serveur : EC2, auto scalling group et load balancer. Vous mettrez à jours les variables `bucket` et `dynamo_table` avec les variables qui proviendront du premier script. Ces variables seront injectées comme variables d'environnement dans les instances EC2 pour être accessible avec `os.getenv()`. Pendant la phase de développement sur votre machine, mettez à jour le fichier `.env`
 
-Pour exécuter un fichier spécifique faites `cdktf deploy -a python mon_script.py`
+Pour exécuter un fichier spécifique faites, `cdktf deploy -a python mon_script.py`
 
 Si vous faites ce projet en groupe, je vous encourage à rapidement mettre en place un dépôt git et à travailler en parallèle.
 
-Voici le macro barème qui sera appliqué si vous êtes 3 :
+Voici le macro-barème qui sera appliqué si vous êtes 3 :
 
 - Vous avez tout qui fonctionne correctement : 20
 - Vous avez les fonctionnalités de base qui fonctionnent sans la génération url signées pour l'affichage des images et la détection des labels : 16
 - Vous avez la possibilité de poster et afficher des publications : 14
-- Vous avez seulement la partir création de publication : 10
+- Vous avez seulement la partie création de publication : 10
 
-Je pars du principe que le code python est propre à chaque fois et que le template Terraform fonctionne. Je n'attends pas des commentaires, mais un code lisible.
+Je pars du principe que le code python est propre à chaque fois et que le template Terraform fonctionne. Je n'attends pas des commentaires partout, mais un code lisible (variables signifiantes à minima).
 
 Si vous faites ce travail seul ou à deux cela sera pris en compte. Considérez que si vous êtes seul, faire la fonctionnalité de création de publications et leur récupération vaudra un 20. Si vous êtes à deux le 20 il faut ajouter la partie détection des labels.
 
-## ✨Aides
+## ✨ Aides
 
-Ce projet contient des choses que vous avez déjà vu, ainsi que des choses nouvelles. Voici pour vous aider de nombreux exemples de code. N'hésitez pas retourner dans le cours ou aller sur internet pour vous aider. Bien entendu ce ne sont que des aides, et pas la solution à l'exercice.
+Ce projet contient des choses que vous avez déjà vu, ainsi que des choses nouvelles. VVoici de nombreux exemples de code pour vous aider. N’hésitez pas à retourner dans le cours ou à aller sur Internet. Bien entendu, ce ne sont que des aides, et pas la solution à l'exercice.
 
 ### 💣Comment attaquer le problème
 
@@ -72,16 +72,16 @@ Vous avez trois choses à faire :
 
 3. Le code de l'infra à déployer
 
-Je vous conseille de ce travail dans cet ordre :
+Je vous conseille de faire ce travail dans cet ordre :
 
 1. Créer le code terraform pour créer le bucket s3 et la base dynamoDB
-2. Faites la partie ok sur la création de post et leur récupération
+2. Faites la partie création de posts et leur récupération
 3. Mettez à jour le code Terraform pour ajouter une lambda qui se déclenche quand un fichier est déposé dans le bucket
 4. Implémentez la lambda via l'interface graphique d'AWS
-5. Récupérer le code et mettez votre script Terraform à jour
+5. Récupérez le code et mettez votre script Terraform à jour
 6. Finissez le code Terraform pour déployer un webservice python comme dans le TP 2
 
-Faire fonctionner votre code avec l'IMH peut s'avérer complexe car l'IHM attend les données dans le format des posts données ci-dessous. Si vous n'arrivez pas à faire fonctionner votre code avec l'interface, **ce n'est pas grave** ! Faite le fonctionner avec Insomnia, Postman ou des requêtes http en python via `request`.
+Faire fonctionner votre code avec l'IHM peut s'avérer complexe car l'IHM attend les données dans le format des posts donné ci-dessous. Si vous n'arrivez pas à faire fonctionner votre code avec l'interface, **ce n'est pas grave** ! Faites le fonctionner avec Insomnia, Postman ou des requêtes http en python via `request`.
 
 ### 💬 Les posts
 
@@ -95,17 +95,17 @@ La donnée au coeur de votre application est un post. Un post pourra avoir les d
   str_id = f'{uuid.uuid4()}'
   ```
 
-- Un titre donnée par l'utilisateur (obligatoire)
+- Un titre donné par l'utilisateur (obligatoire)
 
-- Un contenu donnée par l'utilisateur (obligatoire)
+- Un contenu donné par l'utilisateur (obligatoire)
 
-- Un  auteur (obligatoire)
+- Un auteur (obligatoire)
 
-- S'il y a une image associé son nom et ses labels
+- S'il y a une image associée son nom et ses labels
 
 ### 📚Base Dynamodb
 
-Votre base Dynamodb aura comme clé de partition les utilisateurs, et comme clé de tri l'id des posts. Pour éviter tout chevauchement entre les concepts, je valoriserai les groupes qui préfixent ses deux attributs comme dans le TP 4. Exemple post = `POST#....`, PK= `USER#....` 
+Votre base Dynamodb aura comme clé de partition les utilisateurs, et comme clé de tri l'id des posts. Pour éviter tout chevauchement entre les concepts, je valoriserai les groupes qui préfixent ses deux attributs comme dans le TP 4. Exemple post = `POST#....`, user= `USER#....` 
 
 Pour les attributs des objets que vous allez stocker, je vous conseiller de reprendre ceux du json des posts.
 
@@ -124,18 +124,15 @@ data = table.delete_item(
 )
 
 table.update_item(
-Key={
-    "name": "jon",
-    "lastname": "doe"
-},
-AttributeUpdates={
-    "tel": {
-        "Value": "12345678",
-        "Action": "PUT"
-    }
-},
-ReturnValues='UPDATED_NEW'
+    Key={
+        "name": "jon",
+        "lastname": "doe"
+    },
+    UpdateExpression="SET address = :add, income = :inc",
+    ExpressionAttributeValues={":add": address, ":inc": income},
 )
+
+
 data = table.scan()
 
 data = table.query(
@@ -147,7 +144,7 @@ data = table.query(
 
 ### ✅Les retours des fonctions
 
-Quand vous retourner des posts, pour que l'interface fonctionne correctement, un post doit être un json avec les attributs suivants :
+Quand vous retournez des posts, pour que l'interface fonctionne correctement, un post doit être un json avec les attributs suivants :
 
 ```json
  {
@@ -160,7 +157,7 @@ Quand vous retourner des posts, pour que l'interface fonctionne correctement, un
  }
 ```
 
-L'id, le titre et le body ne demandent pas d'explication. Image est une url vers l'image S3. Comme votre bucket sera privé, pour récupérer une image il vous faut une url présignée. Voici un exemple de code :
+L'id, le titre et le body ne demandent pas d'explication. Image est une url vers l'image S3. Comme votre bucket sera privé, pour récupérer une image il vous faut une url pré-signée. Voici un exemple de code :
 
 ```python
 def create_presigned_url(bucket_name, object_name, expiration=3600):
@@ -224,7 +221,7 @@ return data
 
 ### 🧺 Bucket S3 et détection des labels
 
-Dans le template fourni, un bucket S3 est déjà défini. La détection des labels sera exécutée dés qu'un objet sera uploadé sur S3. Pour faire cela, la lambda ne doit pas être déclenchée par une file  SQS comme dans le travail précédent, mais par la création d'un objet sur S3. Voici un exemple pour vous aider :
+Dans le template fournit, un bucket S3 est déjà défini. La détection des labels sera exécutée dés qu'un objet sera uploadé sur S3. Pour faire cela, la lambda ne doit pas être déclenchée par une file  SQS comme dans un TP précédent, mais par la création d'un objet sur S3. Voici un exemple pour vous aider :
 
 ```python
 from cdktf_cdktf_provider_aws.s3_bucket_notification import S3BucketNotification, S3BucketNotificationLambdaFunction
@@ -350,7 +347,7 @@ labels = [label["Name"] for label in label_data["Labels"]]
 logger.info(f"Labels detected : {labels}")
 ```
 
-Puis il vous faut enfin insérer les labels et la localisation de l'image dans s3 dans la base Dynamodb avec la méthode `update_item`. Vous stockerez en base la contenu de la variable `key` qui est en quelque sort le chemin de l'image dans votre bucket.
+Puis il vous faut enfin insérer les labels et la localisation de l'image dans s3 dans la base Dynamodb avec la méthode `update_item`. Vous stockerez en base le chemin de l'image dans la variable `key`.
 
 ### 📑Récupérer des posts
 
@@ -361,7 +358,7 @@ Cette fonctionnalité demande simplement d'aller récupérer les données stock�
 async def get_all_posts(id_user: Union[str, None] = None):
 ```
 
-Votre code va devoir gérer les deux cas. Je vous conseil pour une meilleur lisibilité de faire deux méthodes qui seront appelées dans **le endpoint du webservice** en fonction du cas dans lequel vous vous trouvez. L'application web attend une réponse qui contient une liste de post, chaque poste ayant les informations suivantes : 
+Votre code va devoir gérer les deux cas. Je vous conseille pour une meilleure lisibilité de faire deux méthodes qui seront appelées dans **le endpoint du webservice** en fonction du cas dans lequel vous vous trouvez. L'application web attend une réponse qui contient une liste de postes, chaque poste ayant les informations suivantes : 
 
 ```js
  {
@@ -373,7 +370,7 @@ Votre code va devoir gérer les deux cas. Je vous conseil pour une meilleur lisi
  }
 ```
 
-Pour obtenir l'url de l'image vous allez utiliser une url dite signée. En effet comme votre bucket est privé, pour rendre accessible les images, il faut créer une url spéciale. Voici le code pour générer cette url :
+Pour obtenir l'url de l'image vous allez utiliser une url dite pré-signée. En effet comme votre bucket est privé, pour rendre accessible les images, il faut créer une url spéciale. Voici le code pour générer cette url :
 
 ```python
 bucket = os.getenv("S3_BUCKET")
@@ -411,7 +408,7 @@ return table.delete_item()
 
 ### 💻 Auto scaling group, Load Balancer, instances EC2, webservice
 
-Cette architecture est gérée par le fichier `main-server.py`. Le script contient déjà de quoi créer les users data pour installer le code du webservice sur une instance EC2. Vous devez remplir la configuration des différents éléments (globalement la même que dans le TP2). Les différences :
+Cette architecture est gérée par le fichier `main_server.py`. Le script contient déjà de quoi créer les users data pour installer le code du webservice sur une instance EC2. Vous devez remplir la configuration des différents éléments (globalement la même que dans le TP2). Les différences :
 
 - Une seule machine de base au lieu de 2
 - Le webservice écoutera sur le port 8080 et pas 80 comme dans le TP. Vous allez devoir changer le port de du `LbTargetGroup`

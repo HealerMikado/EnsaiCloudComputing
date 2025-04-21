@@ -31,7 +31,7 @@
                 <section>
                     <h1>Cloud Computing, CM4</h1>
                     <h2>Stockage de données dans le Cloud</h2>
-                    <p>Pépin Rémi, Ensai, 2024</p>
+                    <p>Pépin Rémi, Ensai, 2025</p>
                     <p>remi.pepin@insee.fr</p>
                 </section>
             </section>
@@ -52,7 +52,7 @@
                         <li><span class="important">Stockage block :</span> données
                             directement sur un disque dur (SSH/HDD). Pour stocker des
                             données pour une VM. AWS EBS, GCP Persistent Disk</li>
-                        <li><span class="important">Stockage réseau :</span> données sur
+                        <li><span class="important">Stockage réseau / système de fichiers:</span> données sur
                             un stockage partagé entre plusieurs VM. Pensez aux dossiers
                             partagés de l'Ensai. AWS EFS, GCP Filestore, Azure Files</li>
                         <li><span class="important">Stockage objet :</span> données
@@ -227,11 +227,11 @@ s3.Object('mybucket', 'hello_s3.txt').delete()
                         <li>Base de données No-SQL 👉<span class="important">clé:valeur</span></li>
                         <li>Serverless : pas d'infra à gérer côté utilisateur</li>
                         <li>Stockage <em>illimité</em> (💰💰💰💰💰💰💰💰)</li>
-                        <li>Paiement du stockage, des opérations de lecture et écriture (RCU, WCU)</li>
+                        <li>Paiement du stockage, des opérations de lecture et écriture (💸💸💸💸💸💸)</li>
                         <li>Passage à l'échelle automatique</li>
                         <li>Gestion fine des accès (uniquement certaines lignes/attributs)</li>
                         <li>Réplication entre régions possible</li>
-                        <li>Peut faire des opérations en mode ACID (Atomicité, Cohérence, Isolation, Durabilité)</li>
+                        <li>Peut faire des opérations en mode ACID (Atomicité, Cohérence, Isolation, Durabilité) (💸💸💸💸💸💸)</li>
                     </ul>
                 </section>
                 <section>
@@ -243,15 +243,15 @@ s3.Object('mybucket', 'hello_s3.txt').delete()
                     <h3>Modèle de données</h3>
 
                     <ul>
-                        <li>Pas de schéma stricte pour les données. Uniquement partition key d'obligatoire
+                        <li>Pas de schéma strict pour les données. Uniquement partition key d'obligatoire
                              et la sort key si définie</li>
-                        <li><span class="important">Partition key :</span> sert à déterminer où l'objet sera stocké (clé hashage dans un table de hachage). Si pas de sorted key, 
+                        <li><span class="important">Partition key :</span> sert à déterminer où l'objet sera stocké (clé hachage dans un table de hachage). Si pas de sorted key, 
                             sert de <span class="important">primary key</span></li>
                         <li><span class="important">Sorted key :</span> Permet de trier les données
                              avec la même partition key. Avec elle, elles définissent la 
                              <span class="important">composite primary key</span>.</li>
                         <li>GET/PUT sur les données en utilisant la primary key UNIQUEMENT.</li>
-                        <li>Possibilité d'avoir des indexes secondaires pour requête sur
+                        <li>Possibilité d'avoir des index secondaires pour requête sur
                              autre attributs (mais 💰💰)</li>
                         <li>AWS gère le stockage sur différentes partitions et augmente leur 
                             nombres si nécessaire. Attention aux déséquilibres.</li>
@@ -269,7 +269,7 @@ s3.Object('mybucket', 'hello_s3.txt').delete()
                         <li>S'assurer que l'on peut identifier une entité (PK)</li>
                         <li>Ne pas avoir peur de mettre plusieurs type d'entité par table</li>
                         <li>Limiter les requêtes pour répondre à un besoin</li>
-                        <li>Placer des indexes secondaires si besoin</li>
+                        <li>Placer des index secondaires si besoin</li>
                     </ul>
                     <div class="important-bloc fragment">Au lieu de faire une base "généraliste" on va faire une/des bases spécialisées</div>
                 </section>
@@ -277,7 +277,7 @@ s3.Object('mybucket', 'hello_s3.txt').delete()
                 <section>
                     <h3>Cas d'utilisation</h3>
                     <ul>
-                        <li>Vente en lignes : Amazon utilise DynamoDB pour les paniers</li>
+                        <li>Vente en lignes : Amazon utilise DynamoDB pour ses paniers</li>
                         <li>Cache : stockage des états d'un programme</li>
                         <li>Iot : états des objets</li>
                         <li>Jeux vidéo : leaderboard en temps réel</li>
@@ -428,8 +428,93 @@ table.update_item(
 )
                         </code></pre>
                         </section>
+
+
+
+            <section>
+                <h3>Scan et query</h3>
+                <ul>
+                    <li>🔍 Scan : Parcourt toutes les lignes de la table (<em>full table scan</em>).
+                        Moins performant et très cher !! </li>
+                    <li>🧲 Query : Récupère les éléments en fonction de la clé de partition (et éventuellement la clé de tri)
+                        Plus performant et moins cher !! Possible d'avoir des conditions sur la sort key (=, &lt;, 	&lt;=, &gt;, &gt;=, between, begins_with ) </li>
+                </ul>
             </section>
 
+            <section>
+                <h3>🔍 Scan 1/2</h3>
+                <pre><code class="python" data-trim data-noescape>
+                    # SELECT * FROM  table
+                    response = table.scan()
+
+                    # SELECT COUNT(*) FROM  table
+                    response = table.scan(
+                        Select='COUNT'
+                    )                    
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>🔍 Scan 2/2</h3>
+                <pre><code class="python" data-trim data-noescape>
+                    # SELECT SongTitle, AlbumTitle FROM  table WHERE Artist = 'No One You Know'
+                    response = table.scan(
+                        ExpressionAttributeNames={
+                            '#AT': 'AlbumTitle',
+                            '#ST': 'SongTitle',
+                        },
+                        ExpressionAttributeValues={
+                            ':a': 'No One You Know',
+                        },
+                        FilterExpression='Artist = :a',
+                        ProjectionExpression='#ST, #AT',
+                    )                 
+                </code></pre>
+
+                <p>Le système scan TOUTE la table et retourne que les valeurs qui respectent la condition</p>
+            </section>
+
+            <section>
+                <h3>🧲 Query</h3>
+                <pre><code class="python" data-trim data-noescape>
+                    # SELECT * FROM  table WHERE PK ='USER#johnsonscott' AND SK='#METADATA#johnsonscott'
+                    user="johnsonscott"
+                    response = table.get_item(
+                        Key={
+                            'PK': f"USER#{user}",
+                            'SK' : f"#METADATA#{user}"
+                        }
+                    )
+                    #SELECT * FROM  table WHERE PK ='GAME#azertyazerty' AND SK LIKE 'USER#%'
+                    game="azertyazerty"
+                    response = table.query(
+                        Select='ALL_ATTRIBUTES',
+                        KeyConditionExpression="PK = :pk AND begins_with(SK, :sk)",
+                        ExpressionAttributeValues={
+                            ":pk": f"GAME#{game}",
+                            ":sk": f"USER#"
+                        }
+                    )
+                </code></pre>
+                <p>Le système scan uniquement les valeurs qui respectent la condition car elle est placée sur
+                    la COMPOSITE PRIMARY KEY.
+                </p>
+
+            </section>
+
+            <section>
+                <h3>Scan et query</h3>
+                <ul>
+                    <li style="list-style: '🔍';">Scan : Parcourt toutes les lignes de la table (full table scan).
+                        Moins performant et très cher !! Pour filtrer utilisation de
+                        <span class="important">FilterExpression</span></li>
+                    <li style="list-style: '🧲';">Query : Récupère les éléments en fonction de la clé de partition (et éventuellement la clé de tri)
+                        Plus performant et moins cher !! Possible d'avoir des conditions sur la sort key (=, &lt;, 	&lt;=, &gt;, &gt;=, between, begins_with ).
+                        Utilisation de <span class="important">KeyConditionExpression</span> pour sélectionner les entités souhaités. Possible de les filtrer avec
+                        <span class="important">FilterExpression</span>.</li>
+                </ul>
+            </section>
+        </section>  
 
             <section>
                 <h3>TP S3 - DynamoDB
@@ -437,7 +522,7 @@ table.update_item(
                 <p>Objectif</p>
                 <ul>
                     <li>Créer un bucket avec Terraform et interagir avec via Python</li>
-                    <li>Créer un une table DynamoDB avec Terraform et interagir avec via Python</li>
+                    <li>Créer une table DynamoDB avec Terraform et interagir avec via Python</li>
                 </ul>
             </section>
 

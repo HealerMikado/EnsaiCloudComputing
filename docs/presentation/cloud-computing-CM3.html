@@ -49,7 +49,7 @@
                         <li>J'ai un accès total à ma machine</li>
                     </ul>
                     <div class="important-bloc">Je suis facturé au temps d'utilisation de
-                        mon service. Tant qu'il est allumée je le paye. Qu'il traite 2
+                        mon service. Tant qu'il est allumée je le paie. Qu'il traite 2
                         ou 100 000 requêtes le prix sera le même.
                     </div>
                 </section>
@@ -64,7 +64,7 @@
                     </ul>
                     <div class="important-bloc">Je suis facturé au temps d'exécution de ma
                         fonction. Si elle est souvent déclenchée je paye cher, si elle
-                        ne l'est pas je ne paye rien.
+                        ne l'est pas, je ne paye rien.
                     </div>
                 </section>
 
@@ -78,7 +78,7 @@
                     </ul>
                     <div class="important-bloc fragment">
                         Un service dit "serverless" est un service qui masque totalement
-                        la partie serveur au client, qui devient à la charge du CP. PasS ?
+                        la partie serveur au client, qui devient à la charge du CP. PaaS ?
                     </div>
                 </section>
 
@@ -99,11 +99,11 @@
                     <h3>Avantages / Inconvénients</h3>
                     <div class="container">
                         <div class="col">
-                            <p class="green">Avantages</p>
+                            <p class="green">✅ Avantages</p>
                             <ul>
                                 <li class="fragment">Coût 💴 : si utilisation imprévisible et plutôt faible
                                 </li>
-                                <li class="fragment">Echelle/Elasticité 📈:
+                                <li class="fragment">Échelle / Élasticité 📈:
                                     théoriquement pas de limite car gérées par CP</li>
                                 <li class="fragment">Productivité 👷 : facile à déployer car
                                     moins de configuration/maintenance</li>
@@ -112,15 +112,15 @@
                     </div>
                     <div class="container">
                         <div class="col">
-                            <p class="red">Désavantages possible</p>
+                            <p class="red">❌ Désavantages possible</p>
                             <ul>
                                 <li class="fragment">Latence 🕔: temps de lancement à
                                     prendre en compte (il existe des solutions)</li>
                                 <li class="fragment">Puissance limitée 🛴: conçu pour des
                                     traitements courts et légers (surtout fonctions)</li>
-                                <li class="fragment">Monitorage et débogage 🚑: si plusieurs
+                                <li class="fragment">Supervision et débogage 🚑: si plusieurs
                                     services communiquent entre eux difficile de
-                                    comprendre ce qu'il se passe. </li>
+                                    comprendre ce qui se passe. </li>
                                 <li class="fragment">Coût 💸: ils peuvent exploser si on ne fait
                                     pas attention </li>
                                 <li class="fragment">Enfermement 👿: techno propriétaire  </li>
@@ -135,13 +135,13 @@
                 <section>
                     <h3>AWS Lambda</h3>
                     <ul>
-                        <li>Compatible avec des nombreux langages (dont python)</li>
+                        <li>Compatible avec de nombreux langages (dont python)</li>
                         <li>Configuration de la puissance, timeout, concurrence, variable
-                            d'env </li>
+                            d'environnement </li>
                         <li>Pas de serveurs à gérer</li>
                         <li>Facturation au temps d'exécution (ms)</li>
                         <li>Environnement éphémère géré par AWS</li>
-                        <li>Temps exécution max : 15 min</li>
+                        <li>Temps d'exécution max : 15 min</li>
                     </ul>
                     <div class="important-bloc fragment">Bout de code qui sera exécuté en
                         fonction de déclencheurs (périodicité, requête HTTP, alerte etc)
@@ -163,10 +163,10 @@ def lambda_handler(event, context):
                         </code></pre>
                     <ul>
                         <li><span class="important">lambda_handler</span> : la fonction qui sera appelée</li>
-                        <li><span class="important">event</span> : un dictionnaire avec les params. Dépend du déclencheur
+                        <li><span class="important">event</span> : un dictionnaire avec les paramètres. Dépend du déclencheur
                         </li>
-                        <li><span class="important">context</span> : des métadonnées (nom de la fonction, mémoire max
-                            etc)</li>
+                        <li><span class="important">context</span> : des métadonnées (nom de la fonction, mémoire max,
+                            etc.)</li>
                     </ul>
                 </section>
 
@@ -179,11 +179,11 @@ class LambdaStack(TerraformStack):
         super().__init__(scope, id)
         AwsProvider(self, "AWS", region="us-east-1")
 
-        # Packagage du code
+        # Packaging du code
         code = TerraformAsset(
             self, "code",
             path="./lambda",
-            type= AssetType.ARCHIVE
+            type=AssetType.ARCHIVE
         )
 
         # Create Lambda function
@@ -211,7 +211,7 @@ app.synth()
                         <li>Service pour avoir une queue d'événements (~FIFO)</li>
                         <li>Peut déclencher une lambda ou servir d'output</li>
                         <li>Pas de serveurs à gérer</li>
-                        <li>Facturation au nombre d'évènements</li>
+                        <li>Facturation au nombre d'événements</li>
                     </ul>
                     <div class="important-bloc fragment">Permet de faire le lien entre
                         différents services. On parle de <span class="important purple">découplage</span></div>
@@ -250,7 +250,7 @@ class LambdaStack(TerraformStack):
     def __init__(self, scope: Construct, id: str):
         super().__init__(scope, id)
         AwsProvider(self, "AWS", region="us-east-1")
-        # Packagage du code
+        # Packaging du code
         code = TerraformAsset(...)
         # Create Lambda function
         lambda_function = LambdaFunction(...)
@@ -282,7 +282,7 @@ from datetime import datetime
 sqs = boto3.client('sqs')  #client is required to interact with sqs
 
 def lambda_handler(event, context):
-    # event provenant d'une lambda
+    # event provenant d'une file SQS
     data = int(json.loads(event["Records"][0]["body"])["data"])
 
     sqs.send_message(
@@ -304,7 +304,7 @@ def lambda_handler(event, context):
                         <li>Créer une fonction Lambda simple qui se déclenche
                             périodiquement via la console</li>
                         <li>Créer une fonction Lambda qui somme 2 nombres provenant d'une
-                            queue SQS, puis écris le résultat dans une autre queue SQS</li>
+                            queue SQS, puis écrit le résultat dans une autre queue SQS</li>
                     </ul>
                 </section>
 

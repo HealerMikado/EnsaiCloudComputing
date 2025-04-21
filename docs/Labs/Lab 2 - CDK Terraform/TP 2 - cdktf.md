@@ -9,13 +9,13 @@ parent: Labs
 
 ## Mise en place
 
-Allez sur la plateforme AWS Academy et accédez au cours AWS Academy Learner Lab. Puis cliquez sur `Modules` > `Learner Lab`. Lancez votre environnement en cliquant sur `Start Lab`. Une fois le cercle passé au vert, cliquez sur `AWS Details` et `AWS CLI`. Les clés que vous voyez vont permettre un accès programmatique à votre compte.
+Allez sur la plateforme AWS Academy et accédez au cours AWS Academy Learner Lab. Puis cliquez sur `Modules` > `Learner Lab`. Lancez votre environnement en cliquant sur `Start Lab`. Une fois le cercle passé au vert, cliquez sur `AWS Details` et `AWS CLI`. Ces clés permettent un accès programmatique à votre compte.
 
 Ouvrez un terminal et exécutez la commande `aws configure`. Un prompt va vous demander votre AWS Access Key ID, collez la valeur de `aws_access_key_id`. Faites de même pour la Secret Access Key. Pour la région par défaut, entrez "us-east-1". Validez le dernier prompt. Allez ensuite modifier le fichier `credentials` qui se trouve dans le dossier `.aws` (attention ce dossier est caché).
 
-Créez un dossier `cloud computing` avec la commande `mkdir "cloud computing"`. Déplacez-vous dans le dossier avec la commande `cd "cloud computing"`. Clonez le dépôt git du TP avec un `git clone https://github.com/HealerMikado/Ensai-CloudComputingLab2.git`. Au début de chaque exercice, vous allez devoir réaliser un `pipenv sync` dans le dossier de l'exercice. Cela va créer un environnement Python et y installer toutes les dépendances de l'exercice. Pour que VScode reconnaisse les modules que vous allez utiliser, il faut lui spécifier l'interpréteur qu'il doit utiliser. Faites un `ctrl+shift+P`, tapez `Select Interpreter` et prenez l'interpréteur `pipenv ex X cdktf ...`.
+Créez un dossier `cloud-computing` avec la commande `mkdir "cloud-computing"`. Déplacez-vous dans le dossier avec la commande `cd "cloud computing"`. Clonez le dépôt git du TP avec un `git clone https://github.com/HealerMikado/Ensai-CloudComputingLab2.git`. Au début de chaque exercice, vous allez devoir exécuter un `pipenv sync` dans le dossier de l'exercice. Cela va créer un environnement virtuel Python et y installer toutes les dépendances de l'exercice. Pour que VScode reconnaisse les modules que vous allez utiliser, il faut lui spécifier l'interpréteur qu'il doit utiliser. Faites un `Ctrl+Shift+P`, tapez `Select Interpreter` et prenez l'interpréteur `pipenv ex X cdktf ...`.
 
-> 📦 À cause du fonctionnement de Python, cela va multiplier les environnements virtuels et le stockage qui leur est associé. Une solution moins gourmande en espace disque mais plus "moche" est de réutiliser toujours le même espace.
+> 📦 À cause du fonctionnement de Python, cela va multiplier les environnements virtuels et le stockage qui leur est associé. Une solution moins gourmande en espace disque mais moins élégante est de réutiliser toujours le même espace.
 
 ## Mon premier script avec le CDK Terraform
 
@@ -47,7 +47,7 @@ MyStack(app, "cloud_commputing")
 app.synth()
 
 ```
-Les imports sont tous les imports dont vous aurez besoin. Ils ne sont pas évidents à trouver, donc je vous les donne.
+Voici tous les imports dont vous aurez besoin. Ils ne sont pas toujours évidents à trouver, c’est pourquoi je vous les fournis.
 
 La classe `MyStack` va contenir toute votre architecture. Pour associer les services que vous allez créer à votre *stack*, vous allez passer en paramètre la stack courante à tous vos objets. Ainsi, **tous les objets AWS que vous allez créer vont avoir en premier argument `self`**.
 
@@ -62,7 +62,7 @@ instance = Instance(
 
 Ensuite, via des paramètres nommés, vous allez définir un peu plus en détail votre instance. Rappelez-vous, pour une instance EC2, il vous faut définir son OS (appelé AMI chez AWS) et le type d'instance.
 
-Ajoutez à votre instance son AMI avec le paramètre `ami` qui prendra comme valeur `ami-04b4f1a9cf54c11d0` (c'est l'identifiant de l'AMI Ubuntu dans la région `us-east-1`), et pour le type d'instance, vous prendrez une `t2.micro`. Exécutez votre architecture avec la commande `cdktf deploy` dans le terminal. Connectez-vous au tableau de bord EC2 et vérifiez que votre instance est bien démarrée. Néanmoins, si vous essayez de vous connecter en SSH à votre instance, vous allez voir que c'est impossible. En effet, lors de la définition de l'instance, nous n'avons pas défini la clé SSH à utiliser et le *security group* de l'instance. Tout cela fait que, pour le moment, l'instance n'est pas accessible.
+Ajoutez à votre instance son *AMI* avec le paramètre `ami` qui prendra comme valeur `ami-04b4f1a9cf54c11d0` (c'est l'identifiant de l'AMI Ubuntu dans la région `us-east-1`), et pour le type d'instance, vous prendrez une `t2.micro`. Exécutez votre architecture avec la commande `cdktf deploy` dans le terminal. Connectez-vous au tableau de bord EC2 et vérifiez que votre instance est bien démarrée. Néanmoins, si vous essayez de vous connecter en SSH à votre instance, vous allez voir que c'est impossible. En effet, lors de la définition de l'instance, nous n'avons pas défini la clé SSH à utiliser et le *security group* de l'instance. Tout cela fait que, pour le moment, l'instance n'est pas accessible.
 
 ### Configuration de la partie réseau
 
@@ -98,7 +98,7 @@ security_group = SecurityGroup(
     ]
 )
 ```
-Ce *security group* n'accepte que les connexions HTTP et SSH en entrée et permet tout le trafic en sortie. Pour associer ce *security group* à votre instance, vous allez devoir ajouter un paramètre `security_groups` lors de la création de l'objet. Attention, ce paramètre attend une liste de *security groups*. Pour définir la clé, ajoutez le paramètre `key_name` avec comme valeur le nom de la clé (`vockey`). Vous pouvez maintenant relancer votre instance avec un nouveau `cdktf deploy`. Cela va résilier l'instance précédente et en créer une nouvelle.
+Ce *Security Group* n'accepte que les connexions HTTP et SSH en entrée et permet tout le trafic en sortie. Pour associer ce *Security Group* à votre instance, vous allez devoir ajouter un paramètre `security_groups` lors de la création de l'objet. Attention, ce paramètre attend une liste de *Security Groups*. Pour définir la clé, ajoutez le paramètre `key_name` avec comme valeur le nom de la clé (`vockey`). Vous pouvez maintenant relancer votre instance avec un nouveau `cdktf deploy`. Cela va résilier l'instance précédente et en créer une nouvelle.
 ### Configuration des user data
 
 Pour le moment, nous n'avons pas défini les *user data* de l'instance. Pour les ajouter, il faut simplement ajouter le paramètre `user_data_base64` avec comme valeur la variable contenue dans `user_data.py` (la valeur est déjà importée). Relancez votre *stack* et, après quelques instants, vous pourrez vous connecter au webservice de l'instance. Utilisez l'IP qui s'affiche dans votre terminal après un `cdktf deploy`.
@@ -123,7 +123,7 @@ InstanceEbsBlockDevice(
     volume_type="gp2"
 )]
 ```
-Le premier disque de l'instance aura ainsi un volume de 20 Go, et un second disque sera attaché avec un volume de 100 Go. Les deux disques seront supprimés en même temps que l'instance. Vous pouvez voir les deux disques en vous connectant à l'instance en SSH et en exécutant la commande `df` (*disk free*).
+Le premier disque de l'instance aura ainsi un volume de 20 Go, et un second disque sera attaché avec un volume de 100 Go. Les deux disques seront supprimés en même temps que l'instance. Vous pouvez voir les deux disques en vous connectant à l'instance en SSH et en exécutant la commande `df -h` (*disk free*).
 
 ## Mise en place d'un Auto Scaling Group et d'un Load Balancer
 
@@ -161,7 +161,7 @@ Il ne vous reste plus qu'à lancer votre code. Il va créer les sous-réseaux n�
 
 ### Elastic Load Balancer
 
-Dernière pièce à définir, le *Load Balancer* va avoir la charge de répartir les requêtes entre nos instances. La création via l'interface a caché pas mal de choses et, au lieu de créer un simple objet, il faut en créer 3 :
+Dernière pièce à définir, le *Load Balancer* va avoir la charge de répartir les requêtes entre les instances. La création via l'interface a caché pas mal de choses et, au lieu de créer un simple objet, il faut en créer 3 :
 
 - le *Load Balancer* en tant que tel,
 - le *Target Group* qui va permettre de considérer l'ASG comme une cible possible pour le *Load Balancer*,
@@ -182,7 +182,7 @@ Le *Target Group* est également facile. Utilisez la classe `LbTargetGroup` et p
 - `port` en spécifiant le port 80 et `protocol` en spécifiant `HTTP` car nous voulons que le TG soit accessible uniquement en HTTP sur le port 80,
 - `vpc_id` avec l'id du VPC déjà défini. Cela est nécessaire car cela permet à AWS de savoir que les machines du *Target Group* seront dans le réseau.
 
-Il faut maintenant associer votre *Target Group* à votre ASG. Cela passe par l'ajout d'un attribut `target_group_arns` dans l'ASG. Cet attribut attend la liste des arn (Amazon Resource Names) des Target Groups. Votre *Target Group* expose son arn via l'attribut `arn`.
+Il faut maintenant associer votre *Target Group* à votre ASG. Cela passe par l'ajout d'un attribut `target_group_arns` dans l'ASG. Cet attribut attend la liste des ARN (Amazon Resource Names) des Target Groups. Votre *Target Group* expose son ARN via l'attribut `arn`.
 
 #### Load Balancer Listener
 
@@ -193,10 +193,10 @@ Il ne nous reste plus qu'à dire au *Load Balancer* de forwarder les requêtes H
 - `protocol` qui va prendre la valeur HTTP car nous allons forwarder les requêtes HTTP,
 - `default_action` où nous allons dire ce que nous voulons faire, ici forwarder les requêtes vers notre *Target Group*. Comme un *Load Balancer Listener* peut avoir plusieurs actions, ce paramètre attend une liste. Ensuite, notre action de forward va se définir via un autre objet dont voici le code `LbListenerDefaultAction(type="forward", target_group_arn=target_group.arn)`.
 
-Vous pouvez maintenant relancer votre code avec un `cdktf deploy`, allez sur la page du load balancer, obtenir son adresse dns et accéder au endpoint `/instance`. Rafraîchissez la page et l'id affichez devrait changer régulièrement.
+Vous pouvez maintenant relancer votre code avec un `cdktf deploy`, allez sur la page du load balancer, obtenir son adresse dns et accéder au endpoint `/instance`. Rafraîchissez la page et l'ID affichez devrait changer régulièrement.
 
 ## Conclusion
 
-Vous venez lors de ce TP de créer via du code toute une infrastructure informatique. Même si cela n'est pas simple à faire, le code que vous avez écrit peut être maintenant réutiliser à l'infini et versionné via git. Il est ainsi partageable, et vous pouvez voir son évolution. Il peut également être utilisé dans un pipeline de CI/CD pour que l'architecture soit déployée automatiquement.
+Vous venez lors de ce TP de créer via du code toute une infrastructure informatique. Même si cela n'est pas simple à faire, le code que vous avez écrit peut être maintenant réutiliser à volonté et versionné via git. Il est ainsi partageable, et vous pouvez voir son évolution. Il peut également être utilisé dans un pipeline de CI/CD pour que l'architecture soit déployée automatiquement.
 
-Même si les solution IaC ont des avantages, je ne vous les recommandes pas pour découvrir un service. Explorer l'interface dans un premier temps pour voir les options disponibles permet de mieux comprendre le service. Automatiser la création de service via du code par la suite si c'est nécessaire.
+Même si les solutions IaC ont des avantages, je ne vous les recommande pas pour découvrir un service. Explorer l'interface dans un premier temps pour voir les options disponibles permet de mieux comprendre le service. Automatiser la création de services via du code par la suite si c'est nécessaire.

@@ -7,3 +7,19 @@ python3 -m venv venv
 source venv/bin/activate
 pip3 install -r requirements.txt
 venv/bin/python app.py
+
+
+#!/bin/bash
+echo "userdata-start"        
+apt update
+apt install -y python3-pip python3.12-venv
+git clone https://github.com/HealerMikado/erqsdfzr.git projet
+cd projet/webservice
+python3 -m venv venv
+source venv/bin/activate
+rm .env
+echo 'BUCKET=postgram20250419111920912800000001' >> .env
+echo 'DYNAMO_TABLE=postagram' >> .env
+pip3 install -r requirements.txt
+venv/bin/python app.py
+echo "userdata-end
