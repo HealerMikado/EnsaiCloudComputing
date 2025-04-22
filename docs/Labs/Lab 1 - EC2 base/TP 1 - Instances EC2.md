@@ -89,8 +89,8 @@ Une dernière chose, le TP est probablement trop long pour être réalisé en un
    - `sudo apt install python3.12-venv`: pour installer le module venv python
    - `cd Ensai-CloudComputingLab1` : pour vous placer dans le répertoire du webservice
    - `python3 -m venv venv` : pour créer un environnement virtuel
-   - `source venv/bin/activate` : pour activer l'environnement virtuel
-   - `sudo pip3 install -r requirements.txt` : pour installer les dépendances Python
+   - `source venv/bin/activate` : pour activer l'environnement viruel
+   - `pip3 install -r requirements.txt` : pour installer les dépendances python
    - `sudo venv/bin/python app.py` : pour lancer finalement le webservice depuis votre venv
 
    > 🧙‍♂️`sudo` permet de lancer une commande en mode "super utilisateur" ou "root" (= administrateur dans le monde Windows). Les commandes de type `apt` sont toujours lancées en root.
